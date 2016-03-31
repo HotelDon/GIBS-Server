@@ -2,7 +2,13 @@
   "name": "GIBS-Server",
   "version": "0.0.1",
   "description": "Generic Interet Battle Server",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HotelDon/GIBS-Server"
+  },
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "nssocket": "^0.6.0",
     "sqlite3": "^3.1.2"
   }
