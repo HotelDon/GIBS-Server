@@ -4,7 +4,7 @@ var sqlite = require("sqlite3");
 var db = new sqlite.Database("database.db");
 
 //SQL statements
-var createUserTable = "CREATE TABLE IF NOT EXISTS users (usr_num INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)";
+var createUserTable = "CREATE TABLE IF NOT EXISTS users (usr_num INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
 var insertNewUser = "INSERT INTO users (username, password) VALUES (?,?)";
 
 db.serialize(initializeDB);
