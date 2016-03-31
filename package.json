@@ -1,0 +1,9 @@
+{
+  "name": "GIBS-Server",
+  "version": "0.0.1",
+  "description": "Generic Interet Battle Server",
+  "dependencies": {
+    "nssocket": "^0.6.0",
+    "sqlite3": "^3.1.2"
+  }
+}
