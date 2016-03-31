@@ -1,3 +1,5 @@
+"use strict";
+
 var db = require("./dblite.js");
 
 var nssocket = require("nssocket");
