@@ -26,28 +26,26 @@ function addUser(uname, pword, email, callback)
 {
     bcrypt.hash(pword, 12, hashResult);
     
-    function hashResult(error, hash)
+    function hashResult(err, hash)
     {    
-        if(!error)
+        if(!err)
         {
             db.run(insertNewUser, uname, hash, email, insertResult);
         }
         else
         {
-            console.log("bcrypt hashing failed? "+ err);
-            callback(false, "bcrypt");
+            callback(err);
         }
         
-        function insertResult(error)
+        function insertResult(err)
         {
-            if(!error)
+            if(!err)
             {
-                callback(true, "User created successfully.")
+                callback(null);
             }
             else
             {
-                console.log("Database insert failed! Reason: "+ error);
-                callback(false, "db");
+                callback(err);
             }
         }
     }
