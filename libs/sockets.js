@@ -12,13 +12,16 @@ console.log("Connected to port "+port);
 
 function onConnect (socket)
 {
-    socket.send(["you", "there"], {data:true, string:"I'm a string", number:43});
-    socket.data(["iam","here"], testMessage);
+    socket.send(["connect", "success"]);
+    socket.data(["auth","reg"], register);
+    socket.data(["auth","login"], login);
     
-    function testMessage(data)
+    function register(data)
     {
-        console.log(typeof(data));
-        console.log(data["iam"]);
-        console.log(data["indeedHere"]);
+
+    }
+    function login(data)
+    {
+        
     }
 }
