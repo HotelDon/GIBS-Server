@@ -13,6 +13,7 @@ var getUserPassword = "SELECT password FROM users WHERE username = ?";
 var dummyHash = "$2a$12$jhMgY2jPZuq1OuFxxPRcYur786D5SIdZWTD.E1Go.e2t5PECl.BWC";
 
 exports.addUser = addUser;
+exports.checkPassword = checkPassword;
 
 db.serialize(initializeDB);
 
