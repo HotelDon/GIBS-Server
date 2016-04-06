@@ -41,7 +41,7 @@ function addUser(uname, pword, email, callback)
         {
             if(!err)
             {
-                callback(null);
+                callback(null, "Registered Successfully");
             }
             else
             {
@@ -71,7 +71,7 @@ function checkPassword(uname, pword, callback)
     {   
         if (!err && res)
         { 
-            callback(null);
+            callback(null, "Logged in successfully");
         }
         else
         {
