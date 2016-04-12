@@ -8,7 +8,7 @@ var bcrypt = require("bcrypt");
 var createUserTable = "CREATE TABLE IF NOT EXISTS users (userID INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
 
 var insertNewUser = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
-var getUserPassword = "SELECT password FROM users WHERE username = ?";
+var getUserPassword = "SELECT * FROM users WHERE username = ?";
 
 var dummyHash = "$2a$12$jhMgY2jPZuq1OuFxxPRcYur786D5SIdZWTD.E1Go.e2t5PECl.BWC";
 
@@ -66,30 +66,30 @@ function checkPassword(uname, pword, callback)
         {
             bcrypt.compare(pword, dummyHash, dummyCallback);
         }
-    }
-    
-    function bcryptResult(err, res) 
-    {   
-        if (!err && res)
-        { 
-            callback(null, "Logged in successfully");
+        
+        function bcryptResult(err, res) 
+        {   
+            if (!err && res)
+            { 
+                callback(null, "Logged in successfully");
+            }
+            else
+            {
+                callback(new Error("Incorrect Username or Password"));
+            }
         }
-        else
+        
+        function dummyCallback(err, res)
         {
-            callback(new Error("Incorrect Username or Password"));
-        }
-    }
-    
-    function dummyCallback(err, res)
-    {
-        if(res)
-        {
-            //Wait what? You shouldn't be here.
-            callback(new Error("If you're seeing this, something has gone terribly wrong"));
-        }
-        else
-        {
-            callback(new Error("Incorrect Username or Password"));
+            if(res)
+            {
+                //Wait what? You shouldn't be here.
+                callback(new Error("If you're seeing this, something has gone terribly wrong"));
+            }
+            else
+            {
+                callback(new Error("Incorrect Username or Password"));
+            }
         }
     }
 }
