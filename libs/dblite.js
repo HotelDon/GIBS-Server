@@ -5,7 +5,7 @@ var db = new sqlite.Database("database.db");
 var bcrypt = require("bcrypt");
 
 //SQL statements
-var createUserTable = "CREATE TABLE IF NOT EXISTS users (usr_num INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
+var createUserTable = "CREATE TABLE IF NOT EXISTS users (userID INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
 
 var insertNewUser = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
 var getUserPassword = "SELECT password FROM users WHERE username = ?";
