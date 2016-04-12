@@ -32,7 +32,7 @@ function addUser(uname, hash, email, callback)
         }
         else
         {
-            callback(err);
+            callback(new Error("That username or email is already in use."));
         }
     }
 }
