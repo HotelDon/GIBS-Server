@@ -41,7 +41,7 @@ function getUserInfo(uname, callback)
 {
     db.get(lookupUserInfo, uname, lookupResult);
     
-    function usernameResult(err, row)
+    function lookupResult(err, row)
     {
         if(!err && row != undefined)
         {
