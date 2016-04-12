@@ -10,7 +10,7 @@ var insertNewUser = "INSERT INTO users (username, password, email) VALUES (?,?,?
 var lookupUserInfo = "SELECT * FROM users WHERE username = ?";
 
 exports.addUser = addUser;
-exports.checkPassword = checkPassword;
+exports.getUserInfo = getUserInfo;
 
 db.serialize(initializeDB);
 
