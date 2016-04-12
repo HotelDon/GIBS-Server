@@ -2,15 +2,12 @@
 
 var sqlite = require("sqlite3");
 var db = new sqlite.Database("database.db");
-var bcrypt = require("bcrypt");
 
 //SQL statements
 var createUserTable = "CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
 
 var insertNewUser = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
 var getUserPassword = "SELECT * FROM users WHERE username = ?";
-
-var dummyHash = "$2a$12$jhMgY2jPZuq1OuFxxPRcYur786D5SIdZWTD.E1Go.e2t5PECl.BWC";
 
 exports.addUser = addUser;
 exports.checkPassword = checkPassword;
@@ -23,73 +20,36 @@ function initializeDB()
     db.run(createUserTable);
 }
 
-function addUser(uname, pword, email, callback)
+function addUser(uname, hash, email, callback)
 {
-    bcrypt.hash(pword, 12, hashResult);
-    
-    function hashResult(err, hash)
-    {    
+    db.run(insertNewUser, uname, hash, email, insertResult);
+       
+    function insertResult(err)
+    {
         if(!err)
         {
-            db.run(insertNewUser, uname, hash, email, insertResult);
+            callback(null, "User added successfully");
         }
         else
         {
             callback(err);
         }
-        
-        function insertResult(err)
-        {
-            if(!err)
-            {
-                callback(null, "Registered Successfully");
-            }
-            else
-            {
-                callback(err);
-            }
-        }
     }
 }
 
-function checkPassword(uname, pword, callback)
+function checkPassword(uname, callback)
 {
     db.get(getUserPassword, uname, usernameResult);
     
     function usernameResult(err, row)
     {
-        if(row != undefined)
+        if(!err && row != undefined)
         {
-            bcrypt.compare(pword, row["password"], bcryptResult);
+            callback(null, row);
         }
         else
         {
-            bcrypt.compare(pword, dummyHash, dummyCallback);
-        }
-        
-        function bcryptResult(err, res) 
-        {   
-            if (!err && res)
-            { 
-                callback(null, "Logged in successfully");
-            }
-            else
-            {
-                callback(new Error("Incorrect Username or Password"));
-            }
-        }
-        
-        function dummyCallback(err, res)
-        {
-            if(res)
-            {
-                //Wait what? You shouldn't be here.
-                callback(new Error("If you're seeing this, something has gone terribly wrong"));
-            }
-            else
-            {
-                callback(new Error("Incorrect Username or Password"));
-            }
+            callback(new Error("Username does not exist!"));
         }
     }
 }
