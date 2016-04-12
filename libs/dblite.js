@@ -7,7 +7,7 @@ var db = new sqlite.Database("database.db");
 var createUserTable = "CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, email TEXT UNIQUE NOT NULL)";
 
 var insertNewUser = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
-var getUserPassword = "SELECT * FROM users WHERE username = ?";
+var lookupUserInfo = "SELECT * FROM users WHERE username = ?";
 
 exports.addUser = addUser;
 exports.checkPassword = checkPassword;
@@ -37,9 +37,9 @@ function addUser(uname, hash, email, callback)
     }
 }
 
-function checkPassword(uname, callback)
+function getUserInfo(uname, callback)
 {
-    db.get(getUserPassword, uname, usernameResult);
+    db.get(lookupUserInfo, uname, lookupResult);
     
     function usernameResult(err, row)
     {

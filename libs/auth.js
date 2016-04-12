@@ -10,7 +10,7 @@ module.exports = function(db){
     
     function login(uname, pword, callback)
     {
-        db.checkPassword(uname, hashCallback);
+        db.getUserInfo(uname, hashCallback);
         
         function hashCallback(err, row)
         {
