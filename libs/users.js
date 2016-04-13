@@ -39,7 +39,7 @@ module.exports = function(db)
             }
             else
             {
-                callback(err);
+                callback(new Error("Incorrect username or password"));
             }
         }
     }
