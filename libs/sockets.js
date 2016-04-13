@@ -1,7 +1,7 @@
 "use strict";
 
 var db = require("./dblite.js");
-var auth = require("./auth.js")(db);
+var users = require("./users.js")(db);
 
 var nssocket = require("nssocket");
 
@@ -19,22 +19,24 @@ function onConnect (socket)
     
     function register(data)
     {
-        auth.register(data.uname, data.pword, data.email, callback);
+        
+        users.userRegister(socket, data.uname, data.pword, data.email, callback);
     }
     function login(data)
     {
-        auth.login(data.uname, data.pword, callback);
+        users.userLogin(socket, data.uname, data.pword, callback);
     }
     
     function callback(err, result)
     {
         if(err)
         {
-            console.log("Error: "+err);
+            console.log(err);
         }
         else
         {
-            console.log("Result: "+result);
+            console.log(result);
+            console.log(socket.userData);
         }
     }
 }
