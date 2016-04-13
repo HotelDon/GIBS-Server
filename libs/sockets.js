@@ -18,8 +18,7 @@ function onConnect (socket)
     socket.data(["auth","login"], login);
     
     function register(data)
-    {
-        
+    {    
         users.userRegister(socket, data.uname, data.pword, data.email, callback);
     }
     function login(data)
