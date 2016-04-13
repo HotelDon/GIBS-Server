@@ -69,7 +69,7 @@ module.exports = function(db){
             {
                 if(err)
                 {
-                    callback(err);
+                    callback(new Error("Email or Username is already in use!"));
                 }
                 else
                 {
