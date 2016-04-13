@@ -73,7 +73,7 @@ module.exports = function(db){
                 }
                 else
                 {
-                    login(uname, pword, callback);
+                    callback(null, "Registration Successful!")
                 }
             }
         }
