@@ -16,6 +16,7 @@ function onConnect (socket)
     socket.send(["connect", "success"]);
     socket.data(["auth","reg"], register);
     socket.data(["auth","login"], login);
+    socket.on("close", disconnect);
     
     function register(data)
     {    
@@ -37,5 +38,10 @@ function onConnect (socket)
             console.log(result);
             console.log(socket.userData);
         }
+    }
+    
+    function disconnect()
+    {
+        
     }
 }
