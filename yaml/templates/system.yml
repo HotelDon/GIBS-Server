@@ -11,40 +11,65 @@ maxTeamSize:
 # Even if you do something dumb like never use the stat in a formula.  
 battlerStats:
     # There are two stat types: Permanent and Transitory. 
-    # Permanent stats are unique to each battler.
-    # Note: All Min and Max definitions are optional, but highly encouraged.
+    # Permanent stats differ from battler to battler.
     permanentStats:
         # Regular stats grow according to the the supplied growth function, and can be modified in
-        # battle by moves, abilities and traits. 
+        # battle by moves, traits and items. Regular stats are all functionally similar, so
+        # you only need to define their properties once. If the regularStats entry is not defined, 
+        # it is assumed you don't want any regular stats, and the system  will act accordingly. 
         regularStats: 
-            # An array containing the name of all regular stats. These are the names displayed to
-            # the player. An empty array means no regular stats, and everything else will be 
-            # ignored. I'm not sure why you would do this, but you can!
+            # An array containing the names of all regular stats. These are the names displayed to
+            # the player, so they can contain spaces or whatever weird symbols you deem necessary. 
             statNames: []
             # An array containing unique abbreviations of the names listed above. These are used as 
             # variable names in formulas, and can only contain letters and numbers (no spaces).
             # Abbreviations must be listed in the same order as above to map properly. 
             abbreviatedNames: []
-            # The base value of a stat is the same for all battlers of the same type.
-            # These values dictate the general strenghts and weaknesses of a type of battler
-            # compared to other types. Higher numbers should be better than lower numbers. 
-            minBaseValue:
-            maxBaseValue:
-            # The growth rate of a stat is unique to each battler. It dictates the strength
-            # of a battler in that stat, relative to other battlers of the same type.
-            # As before, higher numbers should be better than lower numbers.
-            minGrowthRate:
-            maxGrowthRate:
-            # Stat experience is gained from battling other battlers. Defeating a battler gives you
-            # stat experience, while losing to a battler gives it stat experience. The type and
-            # amount of stat XP given depends on the battler. Stat XP has no effect on level.
-            minStatXP:
-            maxStatXP:
-            # Defines the stat growth formula for all normal stats. Should include base value, 
-            # growth value, stat XP and level, unless you've got something crazy in mind. 
+            # There are three possible components for determining stat values: Base value, Growth
+            # Rate, and Stat XP. You can use any combination of them you wish, including none of 
+            # them if you want regular stats to be meaningless. Why would you do that?
+            statComponents: 
+                # The base value of a stat is the same for all battlers of the same type. These
+                # values dictate the general strenghts and weaknesses of a type of battler compared
+                # to other types. Higher numbers should be better than lower numbers. Setting
+                # enableBaseValues to false disables base values. Setting it to true means that base
+                # values should be defined for all battler types. False will disable base values. 
+                enableBaseValues:
+                # The growth rate of a stat is unique to each battler. It dictates the strength
+                # of a battler in that stat, relative to other battlers of the same type. As before, 
+                # higher numbers should be better than lower numbers. You can disable growth rates  
+                # by setting enableGrowthRates to false. If set to true, Growth rates will be 
+                # assigned when a new battler is generated for a player. False disables growth rates. 
+                enableGrowthRates:
+                # Stat experience is gained from battling other battlers. Defeating a battler gives you
+                # stat experience, while losing to a battler gives it stat experience. Stat XP has no 
+                # effect on level. The type and amount of stat XP given depends on the battler; if 
+                # enableStatXP is set to true, then these values must be defined in a battler's type
+                # definiton. If set to false, all stat xp values are ignored. 
+                enableStatXP:
+                # baseValueRange defines the min and max values allowed for a battler's base values.
+                # If baseValueRange is missing, then it is assumed there are no restrictions
+                # on accepted values.  
+                baseValueRange:
+                    # minBaseValue must be lower than maxBaseValue. If minBaseValue is missing, 
+                    # then there is no minimum value restriction.
+                    minBaseValue:
+                    # maxBaseValue must be lower than minBaseValue. If maxBaseValue is missing, 
+                    # then there is no maximum value restriction. 
+                    maxBaseValue:
+                # The same rules apply to growthRateRange and statXPRange.
+                growthRateRange:
+                    minGrowthRate:
+                    maxGrowthRate:
+                statXPRange:
+                    minStatXP:
+                    maxStatXP:
+            # Defines the stat growth formula for all normal stats. The formula is limited to using
+            # the three stat components (whichever are enabled) using the variables "base", "growth", 
+            # and "xp", and the battlers level, using the variable "lvl". 
             statGrowthFormula: ""
-            # Minimum and Maxmimum values for all regular stats. 
-            # While negative stat values are allowed, you probably don't want them to be,
+            # Minimum and Maxmimum values for the output of the statGrowthFormula for all regular
+            # stats. While negative stat values are allowed, you probably don't want them to be,
             # and a max cap on stats can prevent all sorts of shenanigans.
             minFinalValue:
             maxFinalValue:
