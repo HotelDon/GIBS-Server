@@ -1,9 +1,6 @@
 ---
 # Give it a nice name! 32 char max
 name: "" 
-# Can't be negative. Limited to 10 for preformance, while the game designer inside of me says 
-# should limit yourself even more. 
-maxTeamSize:
 # This is where you define the stats you want your battlers to have. 
 # There are two mandatory stats, level and HP, which are detailed below.
 # Beyond that, you can have as many or as few stat types defined as you want.
@@ -314,3 +311,14 @@ elementSystem:
                 matchupName1: []
                 matchupName2: []
                 matchupName3: []
+misc:
+    # Can't be negative. Limited to 10 for preformance, while the game designer inside of me says 
+    # should limit yourself even more. 
+    maxTeamSize:
+    # The max number of moves a battler can know. Limited to 8 for preformance reasons.
+    maxMoves:
+    # Battler types have minimum levels defined for when a battler can learn specific moves. If
+    # levelRestriction is set to strict, then any battler with moves learned earlier than they
+    # should without a move trainer will be rejected. If set to lax, then the level check is ignored.  
+    levelRestriction: Strict/Lax
+    
