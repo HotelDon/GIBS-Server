@@ -35,12 +35,13 @@ battlerStats:
                 # enableBaseValues to false disables base values. Setting it to true means that base
                 # values should be defined for all battler types. False will disable base values. 
                 enableBaseValues:
-                # The growth rate of a stat is unique to each battler. It dictates the strength
-                # of a battler in that stat, relative to other battlers of the same type. As before, 
-                # higher numbers should be better than lower numbers. You can disable growth rates  
-                # by setting enableGrowthRates to false. If set to true, Growth rates will be 
-                # assigned when a new battler is generated for a player. False disables growth rates. 
-                enableGrowthRates:
+                # Unique values are assigned randomly to each regular stat on a per battler basis. 
+                # As such, they dictate the relative strenght of a battler in a stat compared to 
+                # other battler's of the same type. As before, higher numbers should be better than 
+                # lower numbers. You can disable unique values by setting enableGrowthRates to 
+                # false. If set to true, unique values will be assigned when a new battler is 
+                # generated for a player.
+                enableUniqueValues:
                 # Stat experience is gained from battling other battlers. Defeating a battler gives you
                 # stat experience, while losing to a battler gives it stat experience. Stat XP has no 
                 # effect on level. The type and amount of stat XP given depends on the battler; if 
@@ -58,21 +59,24 @@ battlerStats:
                     # then there is no maximum value restriction. 
                     maxBaseValue:
                 # The same rules apply to growthRateRange and statXPRange.
-                growthRateRange:
-                    minGrowthRate:
-                    maxGrowthRate:
+                uniqueValueRange:
+                    minUniqueValue:
+                    maxUniqueValue:
                 statXPRange:
                     minStatXP:
                     maxStatXP:
-            # Defines the stat growth formula for all normal stats. The formula is limited to using
-            # the three stat components (whichever are enabled) using the variables "base", "growth", 
-            # and "xp", and the battlers level, using the variable "lvl". 
-            statGrowthFormula: ""
-            # Minimum and Maxmimum values for the output of the statGrowthFormula for all regular
-            # stats. While negative stat values are allowed, you probably don't want them to be,
-            # and a max cap on stats can prevent all sorts of shenanigans.
-            minFinalValue:
-            maxFinalValue:
+            # Block for defining how the final value of a regular stat is calculated. 
+            finalStatValue:
+                # Defines the formula for calculating the final value for all normal stats. The 
+                # formula is limited to using the three stat components (whichever are enabled) 
+                # using the variables "base", "growth", and "xp", and the battler's level, using the
+                # variable "lvl". 
+                finalValueFormula:
+                # Minimum and Maxmimum values for the output of the statGrowthFormula for all 
+                # regular stats. While negative stat values are allowed, you probably don't want 
+                # them to be, and a max cap on stats can prevent all sorts of shenanigans.
+                minFinalValue:
+                maxFinalValue:
         # Irregular stats are special snowflakes who need their own growth formulas, min/max values,
         # or are derived from the values of other stats. They do, however, use the same stat XP
         # values as regular stats. 
@@ -82,38 +86,56 @@ battlerStats:
             uName1:
                 # Define full stat name here. This is the name shown to players. 
                 fullName: uniqueName1
-                # Derived stats are based on the values of other stats. If set to true, will
-                # ignore minGrowthRate and maxGrowthRate and instead use derviedFormula
+                # Derived stats are based on the final values of other stats. 
                 derivedStat: true/false
-                # Not mandatory if derivedStat is false.
+                # If derivedStat is set to true, then derivedFormula is mandatory. The formula 
+                # should contain at least one other stat in its calculations.  
                 derivedFormula: ""
-                # If false, fill out these fields instead. 
-                # They work the same as the regular stat fields.
-                minBaseValue:
-                maxBaseValue:
-                minGrowthRate:
-                maxGrowthRate:
-                minStatXP:
-                maxStatXP:
-                statGrowthFormula: ""
-                minFinalValue:
-                maxFinalValue:
-        # Untouchable stats are stats that cannot be changed by moves, abilities or traits.
+                # If derivedStat is false, fill out these fields instead. They work the same as 
+                # the entires in regular stats, but each irregular stat uses it's own definitions. 
+                enableBaseValues:
+                enableUniqueValues:
+                enableStatXP:
+                
+                baseValueRange:
+                    minBaseValue:
+                    maxBaseValue:
+                uniqueValueRange:
+                    minUniqueValue:
+                    maxUniqueValue:
+                statXPRange:
+                    minStatXP:
+                    maxStatXP:
+                    
+                finalStatValue:
+                    finalValueFormula:
+                    minFinalValue:
+                    maxFinalValue:
+        # Untouchable stats are stats that cannot be changed mid-battle by moves or abilities. 
         # These include the two mandatory stats, HP and level.
         # Untouchabile stats have unique min/max values and growth rates, similar to irregular stats.
         untouchableStats:
             #Block must be named HP, full name can be anything, but "Hit Points" is recommended.
             HP:
                 fullName: "Hit Points"
-                minBaseValue:
-                maxBaseValue:
-                minGrowthRate:
-                maxGrowthRate:
-                minStatXP:
-                maxStatXP:
-                statGrowthFormula: ""
-                minFinalValue:
-                maxFinalValue:
+                enableBaseValues:
+                enableUniqueValues:
+                enableStatXP:
+                
+                baseValueRange:
+                    minBaseValue:
+                    maxBaseValue:
+                uniqueValueRange:
+                    minUniqueValue:
+                    maxUniqueValue:
+                statXPRange:
+                    minStatXP:
+                    maxStatXP:
+                    
+                finalStatValue:
+                    finalValueFormula:
+                    minFinalValue:
+                    maxFinalValue:
             # Block must be named lvl, full name can be anything but "level" is recommended. 
             # Level only has three fields, and they are all mandatory.
             lvl:
@@ -132,6 +154,8 @@ battlerStats:
     transitoryStats: 
         #Each stat gets a unique name. Block name is abbreviation, full name is defined in block.
         uniqueName2:
+            # Full name. 
+            fullName:
             #The value the stat starts at for all battlers. 
             startingValue:
             #The min and max values for this stat.
