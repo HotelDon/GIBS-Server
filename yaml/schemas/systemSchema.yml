@@ -1,0 +1,590 @@
+title: Battle System
+type: object
+properties:
+    info:
+        type: object
+        properties:
+            name:
+                $ref: "#/definitions/stringDisplayName"
+            description:
+                $ref: "#/definitions/stringDescriptionText"
+        additionalProperties: false
+        required:
+            - name
+            - description
+    battlerStats:
+        type: object
+        properties:
+            permanentStats:
+                type: object
+                properties:
+                    regularStats:
+                        type: object
+                        properties:
+                            regularStatList:
+                                type: object
+                                patternProperties:
+                                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                        type: object
+                                        properties:
+                                            displayName:
+                                                $ref: "#/definitions/stringDisplayName"
+                                            description:
+                                                $ref: "#/definitions/stringDescriptionText"
+                                        additionalProperties: false
+                                        required: ["displayName"]
+                                minProperties: 1
+                                additionalProperties: false
+                            statComponents:
+                                $ref: "#/definitions/statComponentsEntry"
+                        additionalProperties: false
+                        required:
+                            - regularStatList
+                            - statComponents
+                    irregularStats:
+                        type: object
+                        patternProperties:
+                            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                type: object
+                                properties:
+                                    displayName:
+                                        $ref: "#/definitions/stringDisplayName"
+                                    description:
+                                        $ref: "#/definitions/stringDescriptionText"
+                                    statComponents: 
+                                        $ref: "#/definitions/statComponentsEntry"
+                                    derivedStat:
+                                        $ref: "#/definitions/derivedStat"
+                                additionalProperties: false
+                                oneOf:
+                                    - $ref: "#/definitions/irregularStatComponent"
+                                    - $ref: "#/definitions/irregularDerived"
+                        minProperties: 1
+                        additionalProperties: false
+                    untouchableStats:
+                        type: object
+                        properties:
+                            lvl:
+                                type: object
+                                properties:
+                                    displayName:
+                                        $ref: "#/definitions/stringDisplayName"
+                                    description:
+                                        $ref: "#/definitions/stringDescriptionText"
+                                    levelUpFormula:
+                                        type: string
+                                    range:
+                                        $ref: "#/definitions/rangeEntry"
+                                additionalProperties: false
+                                required:
+                                    - displayName
+                                    - levelUpFormula
+                                    - range
+                            HP:
+                                type: object
+                                properties:
+                                    displayName:
+                                        $ref: "#/definitions/stringDisplayName"
+                                    description:
+                                        $ref: "#/definitions/stringDescriptionText"
+                                    statComponents:
+                                        $ref: "#/definitions/statComponentsEntry"
+                                additionalProperties: false
+                                required:
+                                    - displayName
+                                    - statComponents
+                        patternProperties:
+                            "^(?!HP)(?!lvl)([^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64})$":
+                                type: object
+                                properties:
+                                    displayName:
+                                        $ref: "#/definitions/stringDisplayName"
+                                    statComponents: 
+                                        $ref: "#/definitions/statComponentsEntry"
+                                additionalProperties: false
+                                required:
+                                    - displayName
+                                    - statComponents
+                        additionalProperties: false
+                        required:
+                            - HP
+                            - lvl 
+                    statTilts:
+                        type: object
+                        properties:
+                            displayName:
+                                $ref: "#/definitions/stringDisplayName"
+                            tiltType:
+                                type: string
+                                enum: ["Flat", "Percentage", "Multiplier"]
+                            tiltValue:
+                                type: integer
+                            tiltList:
+                                type: object
+                                patternProperties: 
+                                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                        type: object
+                                        properties:
+                                            displayName:
+                                                $ref: "#/definitions/stringDisplayName"
+                                            positiveTilt:
+                                                oneOf:
+                                                    - $ref: "#/definitions/tiltEntry"
+                                                    - $ref: "#/definitions/tiltList"
+                                            negativeTilt:
+                                                oneOf:
+                                                    - $ref: "#/definitions/tiltEntry"
+                                                    - $ref: "#/definitions/tiltList"
+                                        additionalProperties: false
+                                        anyOf:
+                                            - required: [positiveTilt]
+                                            - required: [negativeTilt]
+                                            - required: [positiveTilt, negativeTilt]
+                                minProperties: 1
+                                additionalProperties: false
+                        additionalProperties: false
+                        required:
+                            - displayName
+                            - tiltType
+                            - tiltValue
+                            - tiltList
+                    maxTotalStatXP:
+                        type: integer
+                additionalProperties: false
+                required:
+                    - regularStats
+                    - untouchableStats
+            transitoryStats:
+                type: object
+                patternProperties:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                        type: object
+                        properties:
+                            displayName:
+                                $ref: "#/definitions/stringDisplayName"
+                            startingValue:
+                                type: integer
+                            range:
+                                $ref: "#/definitions/rangeEntry"
+                        additionalProperties: false
+                        required:
+                            - displayName
+                            - startingValue
+                additionalProperties: false
+        additionalProperties: false
+        required:
+            - permanentStats
+    moveStats:
+        type: object
+        properties:
+            mp:
+                type: object
+                properties:
+                    displayName:
+                        $ref: "#/definitions/stringDisplayName"
+                    mandatory:
+                        type: boolean
+                    range:
+                        $ref: "#/definitions/rangeEntry"
+                additionalProperties: false
+                required:
+                    - displayName
+                    - mandatory
+                    - range
+        patternProperties:
+            "^(?!mp)([^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$)":
+                type: object
+                properties:
+                    displayName:
+                        $ref: "#/definitions/stringDisplayName"
+                    range:
+                        $ref: "#/definitions/rangeEntry"
+                additionalProperties: false
+                required:
+                    - displayName
+                    - range
+        additionalProperties: false
+    successFormulas:
+        $ref: "#/definitions/battleFormulaEntry"
+    damageFormulas:
+        $ref: "#/definitions/battleFormulaEntry"
+    mods:
+        type: object
+        properties:
+            statMods:
+                type: object
+                properties:
+                    stageMods:
+                        type: object
+                        patternProperties:
+                            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                type: object
+                                properties:
+                                    modifierType:
+                                        type: string
+                                        enum: ["Flat", "Percentage", "Multiplier"]
+                                    baseModifier:
+                                        type: integer
+                                    minStage:
+                                        type: integer
+                                        maximum: 0
+                                    maxStage:
+                                        type: integer
+                                        minimum: 0
+                                additionalProperties: false
+                                required:
+                                    - modifierType
+                                    - baseModifier
+                        minProperties: 1
+                        additionalProperties: false
+                    specialMods:
+                        type: object
+                        patternProperties:
+                            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                type: object
+                                properties:
+                                    modType:
+                                        type: string
+                                        enum: ["Flat", "Percentage", "Multiplier"]
+                                    modValue:
+                                        type: integer
+                        minProperties: 1
+                        additionalProperties: false
+                minProperties: 1
+                additionalProperties: false
+            damageMods:
+                type: object
+                properties:
+                    damageVariance:
+                        type: object
+                        properties:
+                            modType:
+                                type: string
+                                enum: ["Flat", "Percentage", "Multiplier"]
+                            range:
+                                $ref: "#/definitions/rangeEntry"
+                        additionalProperties: false
+                        required:
+                            - modType
+                            - range
+                patternProperties:
+                    "^(?!damageVariance)([^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64})$":
+                        type: object
+                        properties:
+                            modType:
+                                type: string
+                                enum: ["Flat", "Percentage", "Multiplier"]
+                            modValue:
+                                type: integer
+                        additionalProperties: false
+                        required:
+                            - modType
+                            - modValue
+                minProperties: 1
+                additionalProperties: false    
+            stackOrder: 
+                description: "Blah Blah Blah eat my ass"
+                type: string
+                enum: ["FPM", "FMP", "PFM", "PMF", "MFP", "MPF"]
+        additionalProperties: false
+        minProperties: 2
+        required: 
+            - stackOrder
+    elementSystem:
+        type: object
+        properties:
+            elementalAffinity:
+                type: string
+                enum:
+                    $data: "2/damageModArray"
+            matchupTypes:
+                type: object
+                patternProperties:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                        type: object
+                        properties:
+                            displayName:
+                                $def: "#/definitions/stringDisplayName"
+                            matchupResult:
+                                type: string
+                                enum:
+                                    $data: "4/damageModArray"
+                        additionalProperties: false
+                        required:
+                            - displayName
+                            - matchupResult
+                minProperties: 1
+                additionalProperties: false
+            elementList:
+                type: object
+                patternProperties:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                        type: object
+                        properties:
+                            displayName:
+                                $def: "#/definitions/stringDisplayName"
+                            matchups:
+                                type: object
+                                patternProperties:
+                                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                                        oneOf:
+                                            - type: "null"
+                                            - type: string
+                                              enum: 
+                                                $data: "5/elementsArray"
+                                            - type: array
+                                              items:
+                                                type: string
+                                                enum:
+                                                    $data: "6/elementsArray"
+                                              uniqueItems: true
+                                additionalProperties: false
+                                required:
+                                    $data: "4/matchupTypeArray"
+                            noRepeatsArray:
+                                type: array
+                                items: 
+                                    type: string
+                                    enum: 
+                                        $data: "5/elementsArray"
+                                uniqueItems: true
+                        additionalProperties: false
+                        required:
+                            - displayName
+                minProperties: 1
+                additionalProperties: false
+        additionalProperties: false
+        required:
+            - elementList
+    turnOrder:
+        type: object
+        properties:
+            orderType:
+                type: string
+                enum: ["Formula", "Priority", "Both"]
+            priorityType:
+                type: string
+                enum: ["Absolute", "Formula"]
+            orderFormula:
+                type: string
+        additionalProperties: false
+        required: [orderType]
+        switch:
+            - if:
+                properties:
+                    orderType:
+                        constant: "Priority"
+              then: true
+            - if:
+                properties:
+                    orderType:
+                        constant: "Both"
+              then:
+                required: ["priorityType"]
+              continue: true
+            - if:
+                properties:
+                    orderType:
+                        type: string
+                        enum: ["Formula", "Both"]
+              then:
+                required: ["orderFormula"]
+    criticals:
+        type: object
+        properties:
+            overrideSuccessCheck:
+                type: boolean
+            ignoreStatMods:
+                type: boolean
+            critRateFormula:
+                type: string
+        additionalProperties: false
+        required:
+            - overrideSuccessCheck
+            - ignoreStatMods
+            - critRateFormula
+    misc:
+        type: object
+        properties:
+            maxTeamSize:
+                type: integer
+                min: 1
+                max: 10
+            maxMoves:
+                type: integer
+                min: 1
+                max: 8
+            levelRestriction:
+                type: string
+                enum: ["Strict", "Lax"]
+        additionalProperties: false
+        required:
+            - maxTeamSize
+            - maxMoves
+            - levelRestriction
+    statsArray:
+        type: array
+        items: 
+            type: string
+        uniqueItems: true
+    uniqueNames:
+        type: array
+        items:
+            type: string
+        uniqueItems: true
+    damageModArray:
+        type: array
+        items: 
+            type: string
+        uniqueItems: true
+    elementsArray:
+        type: array
+        items: 
+            type: string
+        uniqueItems: true
+    matchupTypeArray:
+        type: array
+        items: 
+            type: string
+        uniqueItems: true
+additionalProperties: false
+required:
+    - info
+    - battlerStats
+    - successFormulas
+    - damageFormulas
+    - turnOrder
+        
+definitions:
+    battleFormulaEntry:
+        type: object
+        properties:
+            allowCustomFormulas:
+                type: boolean
+            flatValueException:
+                type: boolean
+            formulaList:
+                $ref: "#/definitions/formulaList"
+        additionalProperties: false
+        required: [allowCustomFormulas]
+        switch:
+            - if:
+                properties:
+                    allowCustomFormulas:
+                        constant: true
+              then: true
+            - if:
+                properties:
+                    allowCustomFormulas:
+                        constant: false
+              then:
+                required: [flatValueException]
+              continue: true
+            - if:
+                properties:
+                    allowCustomFormulas:
+                        constant: false
+                    flatValueException:
+                        constant: false
+              then:
+                required: [formulaList] 
+    derivedStat:
+        type: object
+        properties:
+            derivedFormula:
+                type: string
+            range:
+                $ref: "#/definitions/rangeEntry"
+        additionalProperties: false
+        required:
+            - derivedFormula
+    formulaList:
+        type: object
+        patternProperties: 
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                type: string
+        minProperties: 1
+        additionalProperties: false            
+    irregularStatComponent:
+        required:
+            - displayName
+            - statComponents
+    irregularDerived:
+        required:
+            - displayName
+            - derivedStat
+    rangeEntry:
+        type: object
+        properties:
+            min: 
+                type: integer
+            max: 
+                type: integer
+                minimum:
+                    $data: "1/min"
+        additionalProperties: false
+        required:
+            - min
+            - max
+    rangeEntryAlwaysPositive:
+        type: object
+        properties:
+            min:
+                type: integer
+                minimum: 0
+                exclusiveMinimum: true
+            max:
+                type: integer
+                minimum:
+                    $data: "1/min"
+        additionalProperties: false
+        required:
+            - min
+            - max
+    statComponentDefinition:
+        type: object
+        properties:
+            range:
+                $ref: "#/definitions/rangeEntry"
+        additionalProperties: false
+        required:
+            - range
+    statComponentsEntry:
+        type: object
+        properties:
+            baseValues:
+                $ref: "#/definitions/statComponentDefinition"
+            uniqueValues:
+                $ref: "#/definitions/statComponentDefinition"
+            statXP:
+                $ref: "#/definitions/statComponentDefinition"
+            finalStatValue:
+                type: object
+                properties:
+                    finalValueFormula:
+                        type: string
+                    range:
+                        $ref: "#/definitions/rangeEntry"
+                additionalProperties: false
+        additionalProperties: false
+        required:
+            - finalStatValue
+    stringAbbreviation:
+        pattern: "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$"
+    stringDescriptionText:
+        type: string
+        maxLength: 300
+    stringDisplayName:
+        type: string
+        pattern: "^[\S]([\S ]{0,62}[\S]$|$)"
+    tiltEntry:
+        type: string
+        enum:
+            $data: "6/statsArray"
+    tiltList:
+        type: array
+        items:
+            type: string
+            enum:
+                $data: "7/statsArray"
+        uniqueItems: true

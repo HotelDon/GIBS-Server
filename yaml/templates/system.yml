@@ -1,247 +1,427 @@
----
-# Give it a nice name! 32 char max
-name: "" 
+# Basic info about your battle system.
+info:
+    # The name shown to users.
+    name:
+    # A description of your system, also shown to users. 
+    description:
 # This is where you define the stats you want your battlers to have. 
 # There are two mandatory stats, level and HP, which are detailed below.
 # Beyond that, you can have as many or as few stat types defined as you want.
-# However, any stat you define here is a mandatory facet of all battlers in your game. 
-# Even if you do something dumb like never use the stat in a formula.  
+# Any stat you define here is a mandatory facet of all battlers in your game,
+# even if you do something dumb like never use the stat in a formula.  
 battlerStats:
     # There are two stat types: Permanent and Transitory. 
     # Permanent stats differ from battler to battler.
     permanentStats:
-        # Regular stats grow according to the the supplied growth function, and can be modified in
+        # Regular stats are calculated according to a supplied formula, and can be modified in
         # battle by moves, traits and items. Regular stats are all functionally similar, so
         # you only need to define their properties once. If the regularStats entry is not defined, 
         # it is assumed you don't want any regular stats, and the system  will act accordingly. 
         regularStats: 
-            # An array containing the names of all regular stats. These are the names displayed to
-            # the player, so they can contain spaces or whatever weird symbols you deem necessary. 
-            statNames: []
-            # An array containing unique abbreviations of the names listed above. These are used as 
-            # variable names in formulas, and can only contain letters and numbers (no spaces).
-            # Abbreviations must be listed in the same order as above to map properly. 
-            abbreviatedNames: []
-            # There are three possible components for determining stat values: Base value, Growth
-            # Rate, and Stat XP. You can use any combination of them you wish, including none of 
-            # them if you want regular stats to be meaningless. Why would you do that?
+            # A list containing the names of all regular stats.
+            regularStatList:
+                # The abbreviation of the stat name, used for referencing in formulas 
+                # and other places where the names can't have any ambiguity. Must contain only
+                # numbers and letters (no spaces). These names must be unique!
+                sName1:
+                    # The name of the stat, as shown to players. Limited to 64 characters, but
+                    # it can contain spaces or whatever weird symbols you deem necessary. 
+                    displayName:
+                    # An optional description of this stat. Limited to 300 characters. 
+                    description:
+                sName2:
+                    displayName:
+                    description:
+                sName3:
+                    displayName:
+                    description:
+            # The final value of a stat has three possible components: baseValues, uniqueValues,
+            # and Stat XP, all of which are defined in statComponents. You can use any combination 
+            # of them you wish, including none of them if you think that's a good idea. 
             statComponents: 
                 # The base value of a stat is the same for all battlers of the same type. These
                 # values dictate the general strenghts and weaknesses of a type of battler compared
-                # to other types. Higher numbers should be better than lower numbers. Setting
-                # enableBaseValues to false disables base values. Setting it to true means that base
-                # values should be defined for all battler types. False will disable base values. 
-                enableBaseValues:
-                # Unique values are assigned randomly to each regular stat on a per battler basis. 
-                # As such, they dictate the relative strenght of a battler in a stat compared to 
-                # other battler's of the same type. As before, higher numbers should be better than 
-                # lower numbers. You can disable unique values by setting enableGrowthRates to 
-                # false. If set to true, unique values will be assigned when a new battler is 
-                # generated for a player.
-                enableUniqueValues:
-                # Stat experience is gained from battling other battlers. Defeating a battler gives you
-                # stat experience, while losing to a battler gives it stat experience. Stat XP has no 
-                # effect on level. The type and amount of stat XP given depends on the battler; if 
-                # enableStatXP is set to true, then these values must be defined in a battler's type
-                # definiton. If set to false, all stat xp values are ignored. 
-                enableStatXP:
-                # baseValueRange defines the min and max values allowed for a battler's base values.
-                # If baseValueRange is missing, then it is assumed there are no restrictions
-                # on accepted values.  
-                baseValueRange:
-                    # minBaseValue must be lower than maxBaseValue. If minBaseValue is missing, 
-                    # then there is no minimum value restriction.
-                    minBaseValue:
-                    # maxBaseValue must be lower than minBaseValue. If maxBaseValue is missing, 
-                    # then there is no maximum value restriction. 
-                    maxBaseValue:
-                # The same rules apply to growthRateRange and statXPRange.
-                uniqueValueRange:
-                    minUniqueValue:
-                    maxUniqueValue:
-                statXPRange:
-                    minStatXP:
-                    maxStatXP:
-            # Block for defining how the final value of a regular stat is calculated. 
-            finalStatValue:
-                # Defines the formula for calculating the final value for all normal stats. The 
-                # formula is limited to using the three stat components (whichever are enabled) 
-                # using the variables "base", "growth", and "xp", and the battler's level, using the
-                # variable "lvl". 
-                finalValueFormula:
-                # Minimum and Maxmimum values for the output of the statGrowthFormula for all 
-                # regular stats. While negative stat values are allowed, you probably don't want 
-                # them to be, and a max cap on stats can prevent all sorts of shenanigans.
-                minFinalValue:
-                maxFinalValue:
-        # Irregular stats are special snowflakes who need their own growth formulas, min/max values,
-        # or are derived from the values of other stats. They do, however, use the same stat XP
-        # values as regular stats. 
+                # to other types. Higher numbers should be better than lower numbers. Omitting this
+                # field disables base values. 
+                baseValues:
+                    # Range defines the min and max values allowed for a battler's base values.
+                    # If you're not sure what the min/max values should be, you can set to them
+                    # arbitrarily small/large numbers, but keep in mind this can get you in a lot
+                    # of trouble and should not be a permanent solution. This goes for any
+                    # future range entries as well. 
+                    range:
+                        # The value of min must be less than or equal to max. If both values are 
+                        # equal, then it will always be equal to that value. While not useful for
+                        # baseValues, it can be useful in other contexts. 
+                        min:
+                        max:
+                # Unique values are assigned randomly to each regular stat when a new battler is
+                # generated. This means this number can be used to create certain amount of
+                # randomness in stat values, even among battlers with the same baseValues.  
+                # As before, higher numbers should be better than lower numbers, and omitting this
+                # field disables uniqueValues. 
+                uniqueValues:
+                    # Ranges work the same as they do for base values.
+                    range:
+                        min:
+                        max:
+                # Stat experience is gained from battling other battlers. Defeating a battler gives 
+                # you stat experience, while losing to a battler gives it stat experience. Stat XP 
+                # has no effect on level. The type and amount of stat XP given depends on the 
+                # battler, and is defined in a battler's type definition. Stat XP for all stats 
+                # always starts at 0 at battler generation. Omitting this field disables statXP.
+                statXP:
+                    # Range works the same as it does for base values, with the added caveat that
+                    # stat XP always starts at 0 and negative stat XP doesn't make a ton of sense, 
+                    # even you make it possible to lose stat XP. 
+                    range:
+                        min:
+                        max:
+                # Entry for defining how the final value of a regular stat is calculated, using the
+                # various stat components you've defined above. 
+                finalStatValue:
+                    # Defines the formula for calculating the final value for all normal stats. The 
+                    # formula is limited to using the three stat components (whichever are defined) 
+                    # using the variables "base", "unique", and "sxp", and the battler's level, 
+                    # using the variable "lvl". 
+                    finalValueFormula:
+                    # Minimum and Maxmimum values for the output of the finalValueFormula for all 
+                    # regular stats. While negative stat values are allowed, you probably don't want 
+                    # them to be, so min should probably be greater than zero. Setting a reasonable
+                    # cap on stats can prevent all kinds of shenanigans, so try to set a reasonable
+                    # value for max as well. 
+                    range:
+                        min:
+                        max:
+        # Irregular stats are special snowflakes stats that can define different values for the 
+        # entries in statComponents, or are derived from the values of other stats.
         irregularStats:
-            # Block names for irregular stats should be unique abbreviations, while the stat's 
-            # full name is defined under fullName.
+            # Entry names for irregular stats should be unique abbreviations, while the stat's 
+            # full name is defined under displayName.
             uName1:
                 # Define full stat name here. This is the name shown to players. 
-                fullName: uniqueName1
-                # Derived stats are based on the final values of other stats. 
-                derivedStat: true/false
-                # If derivedStat is set to true, then derivedFormula is mandatory. The formula 
-                # should contain at least one other stat in its calculations.  
-                derivedFormula: ""
-                # If derivedStat is false, fill out these fields instead. They work the same as 
-                # the entires in regular stats, but each irregular stat uses it's own definitions. 
-                enableBaseValues:
-                enableUniqueValues:
-                enableStatXP:
-                
-                baseValueRange:
-                    minBaseValue:
-                    maxBaseValue:
-                uniqueValueRange:
-                    minUniqueValue:
-                    maxUniqueValue:
-                statXPRange:
-                    minStatXP:
-                    maxStatXP:
-                    
-                finalStatValue:
-                    finalValueFormula:
-                    minFinalValue:
-                    maxFinalValue:
+                displayName: Unique Name 1
+                # Description of this irregular stat. Limited to 300 characters. Optional.
+                description:
+                # Derived stats are based on the final, unmodded values of other stats. If this
+                # entry is defined, then this stat is a derived stat, and attempts to define
+                # the statComponents block will throw an error. 
+                derivedStat:
+                    # If derivedStat is defined, then derivedFormula is mandatory. The formula 
+                    # should contain at least one other stat in its calculations. Since each stat
+                    # will already contain any base values, unique values, and stat XP of the
+                    # stats being used to calculate it, this is the only component of a 
+                    # derived stat.
+                    derivedFormula: ""
+                    # Uses a range independent of the stat(s) that it is comprised of. 
+                    range:
+                        min:
+                        max:
+                # If derivedStat isn't present, then the statComponents entry must be defined instead. 
+                # It functions exactly like the statComponents entry from regularStats, except that
+                # it only applies to this specific stat. As such, each irregular, non-derived stat 
+                # must have its own statComponents entry. 
+                statComponents:
+                    baseValues:
+                        range:
+                            min:
+                            max:
+                    uniqueValues:
+                        range:
+                            min:
+                            max:
+                    statXP:
+                        range:
+                            min:
+                            max:
+                    finalStatValue:
+                        finalValueFormula: ""
+                        range:
+                            min:
+                            max:
         # Untouchable stats are stats that cannot be changed mid-battle by moves or abilities. 
-        # These include the two mandatory stats, HP and level.
-        # Untouchabile stats have unique min/max values and growth rates, similar to irregular stats.
+        # These include the two mandatory stats, HP and level. Level has it's own unique entry.
+        # HP and user defined untouchable stats have unique statComponent entries, 
+        # similar to irregular stats.
         untouchableStats:
-            #Block must be named HP, full name can be anything, but "Hit Points" is recommended.
-            HP:
-                fullName: "Hit Points"
-                enableBaseValues:
-                enableUniqueValues:
-                enableStatXP:
-                
-                baseValueRange:
-                    minBaseValue:
-                    maxBaseValue:
-                uniqueValueRange:
-                    minUniqueValue:
-                    maxUniqueValue:
-                statXPRange:
-                    minStatXP:
-                    maxStatXP:
-                    
-                finalStatValue:
-                    finalValueFormula:
-                    minFinalValue:
-                    maxFinalValue:
-            # Block must be named lvl, full name can be anything but "level" is recommended. 
-            # Level only has three fields, and they are all mandatory.
+            # Entry must be named lvl.  Level only has three fields, and they are all mandatory.
             lvl:
-                # minValue and maxValue cannot be the same value, cannot be negative, 
-                # and max must be greater than min. 
-                minValue:
-                maxValue:
+                # Can be set to anything, but "level" is recommended.
+                displayName: "level"
+                # A description of the lvl stat. 300 character limit. Optional. 
+                description: 
                 # The level up formula only uses one variable: xp. More complicated 
                 # level up schemes may be supported in the future. 
                 levelUpFormula: ""
+                # While lvl's range entry follows the same rules as other range entries, 
+                # think really hard before you allow negative levels. 
+                range:
+                    min:
+                    max:
+            # Entry must be named HP, full name can be anything, but "Hit Points" is recommended.
+            HP:
+                # Display name can be anything, but "Hit Points" is recommened.
+                displayName: "Hit Points"
+                # Description of HP. Limited to 300 characters. Optional.
+                description:
+                statComponents:
+                    baseValues:
+                        range:
+                            min:
+                            max:
+                    uniqueValues:
+                        range:
+                            min:
+                            max:
+                    statXP:
+                        range:
+                            min:
+                            max:
+                    finalStatValue:
+                        finalValueFormula: ""
+                        # Unlike other range entries, HP's min must be greater than 0, because
+                        # 0 HP is the value that battlers are considered knocked out. 
+                        range:
+                            min:
+                            max:
+        # Stat tilts allows you to tweak the final value of stats a small bit in either direction,
+        # to provide another frustratingly random aspect to battler generation. Look, I'm going to
+        # be honest: I'm only implimenting this because Pokemon has natures, and this was the best
+        # way I could think to integrate this concept that wasn't mind numbingly confusing. Stat 
+        # tilts are garbage, don't use them. Omitting this entry disables stat tilts. Do that. 
+        statTilts: 
+            # The name stat tilts are given to the player. Try to make it less inside baseball than 
+            # "stat tilt".
+            displayName:
+            # Defines how stat tilts modify stats. "Flat" adds/subtracts a flat value, "Percent"
+            # increases/decreases the stat by that percent, and "Multiply" multiplies the stat by 
+            # the tilt value. This is applied after the finalStatValue formula, but before any
+            # statMods.
+            tiltType:
+            # Defines how much the stat tilt influences the stat.
+            tiltValue:
+            # The list of all available stat tilts. A stat tilt is assigned randomly from this list
+            # when a battler is generated. A battler can only have one stat tilt. 
+            tiltList:
+                # Unique abbreviation for the stat tilt, for internal reference. 
+                statTiltTypeName1:
+                    # The name of this stat tilt, shown to the player. 
+                    displayName:
+                    # Stats that are increased by statTiltValue for this statTilt type. Stats must
+                    # be referenced by their abbreviated name. 
+                    positiveTilt: ""
+                    # Stats that are decreased by statTiltValue for this statTilt type. Stats must
+                    # referenced by their abbreviated name. 
+                    negativeTilt: ["",""]
+                statTiltTypeName2:
+                    displayName:
+                    positiveTilt: ["", ""]
+                    negativeTilt: ""
         # Limit the total amount of stat xp a battler can have across all their stats. 
         # Leave blank for no limit. 
         maxTotalStatXP:
     #Transitory stats start at the same values for all battlers. 
     #They can only be modified by moves, abilities, and traits during battle.
     transitoryStats: 
-        #Each stat gets a unique name. Block name is abbreviation, full name is defined in block.
+        #Each stat gets a unique name. Entry name is abbreviation, full name is defined in entry.
         uniqueName2:
             # Full name. 
-            fullName:
+            displayName:
             #The value the stat starts at for all battlers. 
             startingValue:
-            #The min and max values for this stat.
-            minValue:
-            maxValue:
-    
+            #The range entry has min and max values for this stat.
+            range:
+                min:
+                max:
 # Move stats are stats that moves can have, to differentiate similar moves from one another. 
-# Unlike battler stats, not all moves impliment all move stats. It is possible for a move to have
-# zero move stats defined. 
-move-stats:
-        # More unique names! Block name is the abbreviation used in formulas, no spaces. 
-        uniqueName3:
-            # Full name is the stat name displayed to the user.
-            fullName: 
-            # Move stats have min and max values only. 
-            minValue:
-            maxValue:
-        uniqueName4:
-            fullName:
-            minValue:
-            maxValue:
-# Stat modifiers are effects that modify stat values positively or negatively.
-# Stat mods are limited by the min and max values of whatever stat you are modding. 
-# If such a mod would go past the min or max value of a stat, it instead equals that value. 
-statModifiers:
-    # Stage mods are stat mods that stack with each other in stages, both positive and negative, 
-    # and can be applied by moves or abilities. They modify a regular, irregular, or transitory
-    # stat by a certain percentage or flat value.  Adding a stage of an effect increases the stat,
-    # while subtracting a stage decreases it.
-    stageMods:
-        # Mod types must have unique names. No spaces. 
-        mod1:
-            # Must be an integer. This value is multiplied by the current stage to get the mods
-            # value, and therefor determines the relative intensity of this stageMod. 
-            baseModifier:
-            # Can either be "flat" or "percent". Flat adds/subtracts baseModifier*stage to the 
-            # affected stat. Percentage takes the baseModifier*stage and increases/decreases 
-            # the stat by that percentage. 
-            modifierType: "flat/percent"
-            # Cannot be positive. If minStage is zero, this mod can never be detrimental to a 
-            # battler. A blank or nonexistant minstage can be infinitly detrimental.
-            minStage:
-            # Cannot be negative. If maxStage is zero, this mod can never be beneficial to a battler. 
-            # If minStage and maxStage are both zero, then this mod can never take effect. Dummy. 
-            # A blank or nonexistant maxstage can be infinitely beneficial. 
-            maxStage:
-    # Special stat mods that affect stats independently of the stage system. Can only stack when 
-    # obtained from multiple sources. Applied after stage mods.
-    specialMods:
-        #Unique name, no spaces. 
-        uniqueMod2:
-            # Sum adds the modifier to the stat, product multiplies the stat by it. 
-            modifierType: "sum/product"
-            # The value to modify the stat by. 
-            modifierValue:
+# They can be referenced in success or damage formulas, or by other moves and abilities. 
+# Unlike battler stats, not all moves impliment all move stats; it is even possible for a move 
+# to have zero move stats defined. The values for a move stat are defined when creating a move. 
+moveStats:
+    # More unique names! Entry name is the abbreviation used in formulas, no spaces. 
+    uniqueName3:
+        # Full name is the stat name displayed to the user.
+        displayName: 
+        # Move stats have only a range entry.
+        range:
+            min:
+            max:
+    uniqueName4:
+        displayName:
+        range:
+            min:
+            max:
 # These formulas are for defining the probability of a move executing successfully, which in most
 # cases boils down to "does it hit the enemy or not?". The output of these formulas are treated
 # as probabilities: p(success) >= 1 never misses, p(success) <= 0 never hits, so your formulas 
 # should be designed accordingly. 
 successFormulas: 
-    #Unique names please! No spaces. 
-    toHitFormula1: ""
-    toHitFormula2: ""
+    # If set to true, this will allow people creating moves to supply their own success formula
+    # instead of using one defined here. If false, this forces the use of predefined formulas. 
+    allowCustomFormulas:
+    # If allowCustomFormulas is false, then setting this to true will allow you to use flat
+    # success "formulas" without needing to predefine all of them. If both allowCustomFormulas
+    # and flatValueException are false, then formulaList will become a mandatory entry.   
+    # If allowCustomFormulas is set to true, then this field is ignored. 
+    flatValueException:
+    # List containing all predefined success formulas. 
+    formulaList:
+        #Unique names please! No spaces.
+        toHitFormula1: ""
+        toHitFormula2: ""
 # Damage formulas are used for determining how much damage a damaging move will do to a battler if 
 # the move is successful. You have free reign to decide how much damage moves do, but keep in mind
 # how much HP battlers have on average. You can define as many damage formulas as you like. 
 damageFormulas:
-    # Unique names, no spaces. 
-    damageFormula1:
-    damageFormula2:
-# Damage mods modify the amount of damage a move does after all regular stat calculations. 
-# These mods can either be flat values or percentages. Multiple damage mods can stack: flat mods 
-# stack additively, while percentage mods stack multiplicatively. Flat values are added to the final 
-# damage value, and percentages are multiplied. There are two default damage mods, damageVariance 
-# and critical. You can omit these if you don't want damage variance, and/or if haven't enabled 
-# criticals. You can also define as many other damage mods as you want, which can be used by moves,
-# abilities, and items.  
-damageMods:
-    # Damage variance allows moves to always do different amounts of damage, even if there are no
-    # other stat or damage modifiers at play. This can add a bit of randomness to battles, 
-    # especially in low stats play, or systems where moves rarely miss. Variance is defined as a 
-    # range, of which a number is chosen at random and then applied. 
-    damageVariance:
-        # The minimum and maximum percent variance.
-        minVariance: 
-        maxVariance:
-    # The damage multiplier for damaging moves that critical. Can be either be a flat value, or a 
-    # formula if you want to be fancy. 
-    critical: ""
+    # If set to true, this will allow people creating moves to supply their own damage formulas
+    # instead of using one defined here. If false, this forces the use of predefined formulas. 
+    allowCustomFormulas:
+    # If allowCustomFormulas is false, then setting this to true will allow you to use flat
+    # damage "formulas" without needing to predefine all of them. If both allowCustomFormulas
+    # and flatValueException are false, then formulaList will become a mandatory entry.   
+    # If allowCustomFormulas is set to true, then this field is ignored. 
+    flatValueException: 
+    # List containing all predefined damage formulas.
+    formulaList:
+        # Unique names, no spaces. 
+        damageFormula1:
+        damageFormula2:
+# Mods are predefined effects that can be applied by moves, abilites and items. 
+# There are two types of mods: Stat mods and Damage mods. Mods can either increase or decrease
+# the value of a stat, or the output of a damage formula. If the mods entry is undefined, then
+# mods as a whole are disabled. 
+mods:
+    # Stat modifiers are effects that modify stat values positively or negatively.
+    # Stat mods are limited by the min and max values of whatever stat you are modding. 
+    # If such a mod would go past the min or max value of a stat, it instead equals that value. 
+    # If statMods is not defined, then there are no stat mods. 
+    statMods:
+        # Stage mods are stat mods that stack with each other in stages, both positive and negative, 
+        # and can be applied by moves or abilities. They modify a regular, irregular, or transitory
+        # stat. Adding a stage of a stage mod increases the stat, while subtracting a stage decreases it.
+        # Stages ALWAYS start at 0, and either go up or down. A single stat cannot have  more than one 
+        # stage mod type affecting it at a time; the newer mod will override the older one. Stage
+        # mods are applied before other stat mods, and never stack with other mods. 
+        stageMods:
+            # Mod types must have unique names. No spaces. 
+            mod1:
+                # Must be an integer. This value is multiplied by the current stage to get the mods
+                # value, and therefor determines the relative intensity of this stageMod. 
+                baseModifier:
+                # Can either be "Flat","Percentage", or "Multiplier. 
+                # Flat adds/subtracts baseModifier*stage to the affected stat. Percentage takes the
+                # baseModifier*stage and increases/decreases the stat by that percentage.
+                # Multiplier takes 1 + baseModifier*stage, and multiplies the stat by that amount. 
+                modifierType: "Flat/Percentage/Multiplier"
+                # Cannot be positive. If minStage is zero, this mod can never be detrimental to a 
+                # battler. A blank or nonexistant minstage can be infinitly detrimental.
+                minStage:
+                # Cannot be negative. If maxStage is zero, this mod can never be beneficial to a battler. 
+                # If minStage and maxStage are both zero, then this mod can never take effect. Dummy. 
+                # A blank or nonexistant maxstage can be infinitely beneficial. 
+                maxStage:
+        # Special stat mods that affect stats independently of the stage system. They are always applied
+        # after stage mods. Unlike stage mods, they can only stack when obtained from multiple sources
+        # of the same modifierType. If a single stat has specialMods of multiple modifierTypes affecting
+        # it, specialMods of the same type are combined and then are applied in the order specified
+        # under stackOrder.
+        specialMods:
+            #Unique name, no spaces. 
+            uniqueMod2:
+                # Flat adds the modifier to the stat as a flat value, percentage increases or 
+                # decreases the stat by that percentage, and multiplier multiplies the stat by
+                # that value.
+                modType: "Flat/Percentage/Multiplier"
+                # The value to modify the stat by. 
+                modValue:
+    # Damage mods modify the amount of damage a move does after normal damage formula calcuations.
+    # They funciton similarly to how special mods work for stats. There is one predefined damageMod, 
+    # damageVariance, which is optional. You may also have as many user defined damage mods as you
+    # wish. If damageMods is undefined, then there are no damageMods. 
+    damageMods:
+        # Damage variance allows moves to always do different amounts of damage, even if there are no
+        # other stat or damage modifiers at play. This can add a bit of randomness to battles, 
+        # especially in low stats play, or systems where moves rarely miss. This damage mod is
+        # always applied after all other damage mods, and is never stacked with other damage mods. 
+        damageVariance:
+            # The type of mod you want damage variance to be: Flat, Percentage, or Multiplier. 
+            # Flat adds a flat value to the damage, Percentage adds or subtracts that percentage of
+            # the damage, and Multiplier multiplies the damage. 
+            modType:
+            # The actual variance is defined as a range, with a minimum and maximum value. A value is 
+            # chosen at random between the min and max range, and then applied according to what type
+            # of mod it is. 
+            range:
+                min: 
+                max:
+        # User defined damage mods must have unique names. User defined damage mods of the same type
+        # stack together (Flat and percentage mods are added together, while Multiplier mods are
+        # multiplied together). If multiple damage mods of differing types are affecting the same
+        # damage source, then the order they are applied in is defined under stackOrder. 
+        damageMod1:
+            # Works the same as modType in damageVariance.
+            modType:
+            # Normal damage mods don't have a variance, instead they just have a modValue.
+            modValue:
+    # Stack order is represented by a string with three letters: F for Flat, P for Percent,
+    # and M for Multiplier. The order of the letters is the order that the specialMods and damageMods
+    # are applied in when multiple mod types are affecting the same stat or damage output. 
+    # Exampes: FPM, MPF, PFM
+    stackOrder: FPM
+# This entry defines the different elements that battler's and moves can have, 
+# and the ways those elements interact with each other. If the elementSystem is undefined, 
+# then there are no elements, and all battlers and moves are treated as having no element. 
+elementSystem:
+    # If a battler and a move share the same type, the name of the damage mod listed here will
+    # take affect. Omitting this field means there is no elemental affinity bonus. 
+    elementalAffinity: "damageModA"
+    # A list of all elemental matchup types. A matchup is defined as the element of the attacker's 
+    # move versus the element of the defending battler. Each matchup type has an associated damage   
+    # modifier: Bad matchups should increase damage to the target, while good matchups should
+    # decrease damage. I recommend creating damage mods specifically for element matchups. 
+    matchupTypes:
+        # Names should be unique, associated values should exist as damage mod names.  
+        matchupName1: 
+            displayName: "Matchup Name 1"
+            matchupResult: "damageModX"
+        matchupName2: 
+            displayName: "Matchup Name 2"
+            matchupResult: "damageModY"
+        MatchupName3: 
+            displayName: "Matchup Name 3"
+            matchupResult: "damageModZ"
+    # A list containing the names of all elements as entries. 
+    # NOTE: Battlers and Moves lacking an element are "typeless", and ignore all benefits/drawbacks
+    # of the elements system. While you could create a "typeless" element that functions similarly,
+    # you don't need to. 
+    elementList:
+        # Names must be unique abbreviations. 
+        element1:
+            # The name of the element, as displayed to the user. 
+            displayName: "Element 1"
+            # A list containing entries with the names of all matchupTypes defined previously. The
+            # elements contained in those entries define the matchupType that occurs when a move 
+            # of this element is used against a battler of the element(s) listed. 
+            matchups:
+                # Each entry contains either a string or an array of strings, and those strings are
+                # the names of elements that fall under that matchup type. A blank entry means
+                # no elements fall under that matchup type. 
+                matchupName1: "element3"
+                matchupName2: 
+                matchupName3: "element2"
+        # Repeat for each element. 
+        element2:
+            displayName: "Element 2"
+            matchups:
+                matchupName1: ["element2", "element3"]
+                matchupName2: "element1"
+                matchupName3:
+        element3:
+            displayName: "Element 3"
+            matchups:
+                matchupName1: 
+                matchupName2:
+                matchupName3:
 # Turn order defines which battler will act first in a battle. 
 turnOrder: 
     # There are three ways to determin battler order: Formula, Priority, or both. 
@@ -249,68 +429,32 @@ turnOrder:
     # first. Priority means all moves must have a priority stat, and higher prirority moves go
     # before lower priorities. A tie in either case results in a battler being chosen at random.
     # Both means moves must have a priority, and you must also define a priorityFormula.
-    orderType: "Formula, Priority, both"
+    orderType: "Formula, Priority, Both"
     # priorityType defines how move priority and orderFormula interact. This field is ignored if 
     # orderType is not "both". Absolute means priority always trumps the formula, which is only used
     # when moves are priority tied. If the formula is tied, then a battler is chosen at random.
     # Formula means the value of priority is included directly in the orderFormula as variable pty. 
-    priorityType: "Absolute, formula"
+    priorityType: "Absolute, Formula"
     # Formula for determining who goes first: each battler runs this formula and the one with the
     # higher output goes first. Since each battler generates their own order value, this formula 
     # cannot contain the enemy's stats. If priorityType is set to formula, pty will equal the 
     # move's priority, otherwise it will equal 0.  
     orderFormula: ""
-# Critical hits are lucky 
+# Criticals are lucky hits that provide extra damage or additional effects to an existing move. 
+# If this entry is defined, criticals are enabled. If this entry is undefined, criticals are disabled.
 criticals:
-    # False means crits never happen, and the rest of this block is ignored and can be left blank. 
-    critsEnabled:
     # If set to true, a critical hit will ignore the results of a regular success check,
     # meaning critical hits will always connect. Moves can still fail for other reasons. 
     overrideSuccessCheck:
+    # If set to true, ignores stat mods when calculating damage for a move that crits.
+    # This section will eventually get more complicated so don't get used to it. 
+    ignoreStatMods:
     # Defines how often battlers can land a critical move. 
     # This formula should be a probability formula, and can be as simple (a flat number) or as 
     # complicated as you want. Note that you can use any monster or move stat in the calculation, 
     # and that modifying those stats will increase or decrease your crit rate. Having dedicated crit
     # stats for battlers and moves can make things less complicated.
     critRateFormula: ""
-# This block defines the way elemental typing works for your system. If this block is missing, it 
-# will be assumed that it works by not existing. Battlers and move can have as many types as you
-# deem necessary, and untyped battlers and moves ignore all typing benefits/drawbacks. 
-elementSystem:
-    # If a battler and a move share the same type, the name of the damage mod listed here will
-    # take affect. Omitting this field means there is no elemental affinity bonus. 
-    elementalAffinity: "damageModA"
-    # A list of all elemental matchup types. Each matchup type has an associated damage modifier:    
-    # Bad matchups should increase damage to the target, while good matchups should
-    # decrease damage. I recommend creating damage mods specifically for element matchups. 
-    matchupTypes:
-        # Names should be unique, associated values should exist as damage mod names.  
-        matchupName1: "damageModX"
-        matchupName2: "damageModY"
-        matchupName3: "damageModZ"
-    elements:   
-        # Unique names for each element. Currently, the element blocks only support defining 
-        # matchup types against other elements, but will support other properties in the future. 
-        element1:
-            # The matchup block has entries for each matchup type, with each entry containing an 
-            # array detailing which other elements fall under that matchup type. A blank or 
-            # nonexistant array means no elements fall under that matchup type. 
-            matchups:
-                # Elements can have a matchup type against itself. Elements cannot show up in more than
-                # one matchup type, nor can they show up in the same matchup type twice.
-                matchupName1: []
-                matchupName2: []
-                matchupName3: []
-        element2:
-            matchups:
-                matchupName1: []
-                matchupName2: []
-                matchupName3: []
-        element3:
-            matchups:
-                matchupName1: []
-                matchupName2: []
-                matchupName3: []
 misc:
     # Can't be negative. Limited to 10 for preformance, while the game designer inside of me says 
     # should limit yourself even more. 

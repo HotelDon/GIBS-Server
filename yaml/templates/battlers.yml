@@ -1,1 +1,76 @@
-battlers:
+# This block defines the different type of battlers you can use in your system. You can add as
+# many battler types (BTs) as you want! Variety is the spice of life. 
+battlerList:
+    # The default block defines certain battler properties that exist for all BTs. There are is one 
+    # predefined entry, which is explained below. It can also contain any additional entries you 
+    # deem necessary. If any entry defined here is redefined in a BTs entry, then the default entry 
+    # will be ignored. Try to limit the number of properties defined here, so BTs don't feel samey. 
+    default:
+        # If for some reason, a battler can't use any of their moves, then this move is selected
+        # instead, and bypasses any move restrictions. Must be a move defined in moveList.
+        defaultMove:
+        # Can contain any number of default properties. Each property must have a unique name. 
+        customStringProperty: "value"
+        customNumberProperty: 34
+        # A defualt value can also contain an list of possible values, one of which will be chosen 
+        # randomly (with equal probability of each choice). All choices must be of the same type - 
+        # a string value or integer, but not a mixture of both. 
+        customRandomProperty:
+            - cool
+            - uncool
+        # You can also make each entry of the list an array - the first entry of the array is the
+        # value, and the second is it's weighting. In this situation, the weighting is mandatory. 
+        # The probablity of any choice being made is equal to it's weight dived by the total weight
+        # of all the opitons defined. 
+        customWeightedProperty:
+            - [superUncool, 40]
+            - [hyperCool, 60]
+    # The name of this entry is an abbreviation for the BT you want to define. 
+    BattlerName:
+        # The display name of this BT. 
+        displayName:
+        # Contains this BT's base stat values, with an entry for each of the three stat types.
+        baseStats:
+            # Contains the baseValues for each regular stat. If regular stats don't use baseValues, 
+            # then you can leave this entire entry blank. Any 
+            regularStats:
+                # Each entry should be an integer value, and is limited to the range defined for
+                # all base stats. If set to lower/higher than the range defined, it will be set to
+                # the min/max value, respectively (note: this is bad. Don't do this). 
+                regularStat1:
+                regularStat2:
+                regularStat3:
+            # Contains the baseValues for any irregular stat that has them enabled. 
+            # If no irregular stats use baseValues, then this field can be left empty. 
+            irregularStats:
+                # Must be an integer, must be within the range defined for the specific stat. 
+                irregularStat1:
+                irregularStat3:
+            # Contains the baseValues for any untouchable stat that has them enabled. 
+            # If no untouchable stats use baseValues, then this field can be left empty. 
+            # While level is an untouchable stat, it can never have a baseValue. 
+            untouchableStats:
+                # Must be an integer, within the specified range for each stat. 
+                HP:
+                untouchableStat1:
+        # An array containing this BT's types. A BT can have as many or as few types as needed. 
+        # If elementType is missing or blank, it is assumed this BT has no type(s). 
+        elementList: 
+        # An array containing all abilities this BT can have. A missing or empty abilityList 
+        # means this BT can never have an ability. Abilities must have corresponding entry in 
+        # effectsList, and it must be an ability effect. 
+        abilityList: []
+        # The moveList entry contains a list of all moves this BT can learn, along with what level  
+        # they would learn that move during normal play. Entries are formated as lvl: movename. 
+        # If a BT can learn multiple moves at a level, then that entry should contain an array of 
+        # move names. If your system doesn't use levels to gate when a BT learns moves, then define
+        # all learnable moves in an array at level 0. For now, moveList is mandatory.  
+        moveList:
+            # Examples. 
+            0: "moveName1"
+            2: ["moveName2","moveName3"]
+            5: "movename4"
+        # You can define as many custom properties as you like, using the same format as the 
+        # custom properties in the default block. 
+        Battler Property 1: "value"
+        Battler Property 2: ["value1", "value1"]

@@ -1,0 +1,117 @@
+type: object
+properties:
+    moveList:
+        type: object
+        properties:
+            default:
+                type: object
+                properties:
+                    successMsg:
+                        type: string
+                    failureMsg:
+                        type: string
+                    noSuccessMsg:
+                        type: string
+                    noTargetMsg:
+                        type: string
+        patternProperties:
+            "^(?!default$)([^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$)":
+                type: object
+                properties:
+                    stats:
+                        $ref: "#/definitions/moveStats"
+                    properties:
+                        $ref: "#/definitions/moveProperties"
+                    success:
+                        oneOf:
+                            - $ref: "#/definitions/moveResults"
+                            - $ref: "#/definitions/moveResultsFail"
+                    noSuccess:
+                        $ref: "#/definitions/moveResults" 
+                    failure:
+                        $ref: "#/definitions/moveResults"  
+                    noTarget:
+                        $ref: "#/definitions/moveResults"
+                additionalProperties: false
+                required:
+                    - stats
+        additionalProperties: false
+        required:
+            - default
+additionalProperties: false
+required:
+    - moveList
+definitions:
+    moveStats:
+        type: object
+        patternProperties:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                oneOf:
+                    - type: integer
+                    - type: "null"
+        additionalProperties: false
+        required:
+            $data: "/moveStatArray"
+    moveProperties:
+        type: object
+        patternProperties:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                oneOf:
+                    - type: string
+                    - type: "null"
+        additionalProperties: false
+    moveResults:
+        type: array
+        items:
+            $ref: "#/definitions/moveResultTypes"
+    moveResultsFail:
+        enum: ["fail"]
+    moveResultTypes:
+        type: object
+        properties:
+            msg:
+                type: string
+            damage: 
+                type: string
+            conditional:
+                type: object
+                properties:
+                    if:
+                        $ref: "#/definitions/statementIf"
+                    then:
+                        $ref: "#/definitions/statementThen"
+                    elseif:
+                        $ref: "#/definitions/statementElseIf"
+                    else:
+                        $ref: "#/definitions/statementThen"
+            random:
+                type: object
+                properties:
+                    probability:
+                        type: string
+                    result:
+                        $ref: "#/definitions/moveResultTypes"
+            
+        minProperties: 1
+        maxProperties: 1
+        additionalProperties: false
+    statementIf:
+        type: string
+    statementIfLogic:
+        enum: ["or", "and"]
+    statementThen:         
+        oneOf:
+            - $ref: "#/definitions/moveResultTypes"
+            - type: array
+              items:
+                $ref: "#/definitions/moveResultTypes"
+              minItems: 2
+    statementElseIf:
+        type: object
+        properties:
+            if:
+                $ref: "#/definitions/statementIf"
+            then:
+                $ref: "#/definitions/statementThen"
+            elseif:
+                $ref: "#/definitions/statementElseIf"

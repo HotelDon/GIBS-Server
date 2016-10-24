@@ -1,0 +1,114 @@
+type: object
+properties:
+    battlerList:
+        type: object
+        properties:
+            default:
+                type: object
+                properties:
+                    defaultMove:
+                        type: string
+                patternProperties:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                        $ref: "#/definitions/customProperties"
+        patternProperties:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                type: object
+                properties:
+                    displayName:
+                        type: string
+                    baseStats:
+                        type: object
+                        properties:
+                            regularStats:
+                                $ref: "#/definitions/baseStatDefinition"
+                                required:
+                                    $data: "/baseStatsList"
+                            irregularStats:
+                                $ref: "#/definitions/baseStatDefinition"
+                                required:
+                                    $data: "/irregularStatsList"
+                            untouchableStats:
+                                $ref: "#/definitions/baseStatDefinition"
+                                required:
+                                    $data: "/untouchableStatsList"
+                    elementList:
+                        oneOf:
+                            - type: string
+                            - type: array
+                              items:
+                                type: string
+                    abilityList:
+                        oneOf:
+                            - enum:
+                                $data: "/abilitiesList"
+                            - array:
+                              items:
+                                enum:
+                                    $data: "/abilitiesList"
+                    moveList:
+                        type: object
+                        patternProperties:
+                            ^[0-9]{1,16}$:
+                                oneOf:
+                                    - enum:
+                                        $data: "/moveList"
+                                    - array:
+                                      items:
+                                        enum:
+                                            $data: "/moveList"
+                patternProperties:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                        $ref: "#/definitions/customProperties"
+                additionalProperties: false
+                required:
+                    - displayName
+                    - baseStats
+                    - moveList
+    baseStatsList:
+        type: array
+    irregularStatsList:
+        type: array
+    untouchableStatsList:
+        type: array
+    abilitiesList:
+        type: array
+    moveList:
+        type: array    
+additionalProperties: false
+required:
+    - battlerList
+    
+definitions:
+    baseStatDefinition:
+        type: object
+        patternProperties:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+                type: integer
+    customProperties:
+        oneOf:
+            - type: string
+            - type: integer
+            - type: array
+              items:
+                type: string
+            - type: array
+              items:
+                type: integer
+            - type: array
+              items:
+                type: array
+                items:
+                    - type: string 
+                    - type: integer
+                additionalItems: false
+            - type: array
+              items:
+                type: array
+                items:
+                    - type: integer
+                    - type: integer
+                additionalItems: false     
+    stringDisplayName:
+        type: string
+        pattern: "^[\S]([\S ]{0,62}[\S]$|$)"
