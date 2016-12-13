@@ -1,3 +1,4 @@
 "use strict";
  
- var sockets = require("./libs/sockets.js"); 
+var validator = require("./libs/validator.js");
+var sockets = require("./libs/sockets.js"); 

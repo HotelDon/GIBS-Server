@@ -1,6 +1,6 @@
 type: object
 properties:
-    battlerList:
+    battlers:
         type: object
         properties:
             default:
@@ -8,107 +8,586 @@ properties:
                 properties:
                     defaultMove:
                         type: string
-                patternProperties:
-                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
-                        $ref: "#/definitions/customProperties"
-        patternProperties:
-            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
-                type: object
-                properties:
-                    displayName:
-                        type: string
-                    baseStats:
-                        type: object
-                        properties:
-                            regularStats:
-                                $ref: "#/definitions/baseStatDefinition"
-                                required:
-                                    $data: "/baseStatsList"
-                            irregularStats:
-                                $ref: "#/definitions/baseStatDefinition"
-                                required:
-                                    $data: "/irregularStatsList"
-                            untouchableStats:
-                                $ref: "#/definitions/baseStatDefinition"
-                                required:
-                                    $data: "/untouchableStatsList"
-                    elementList:
-                        oneOf:
-                            - type: string
-                            - type: array
-                              items:
-                                type: string
-                    abilityList:
-                        oneOf:
-                            - enum:
-                                $data: "/abilitiesList"
-                            - array:
-                              items:
-                                enum:
-                                    $data: "/abilitiesList"
-                    moveList:
+                    properties:
                         type: object
                         patternProperties:
-                            ^[0-9]{1,16}$:
-                                oneOf:
-                                    - enum:
-                                        $data: "/moveList"
-                                    - array:
-                                      items:
-                                        enum:
-                                            $data: "/moveList"
-                patternProperties:
-                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
-                        $ref: "#/definitions/customProperties"
+                            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                                $ref: "#/definitions/customBattlerProperties"
+                        minProperties: 1
+                        additionalProperties: false
+                minProperties: 1
                 additionalProperties: false
-                required:
-                    - displayName
-                    - baseStats
-                    - moveList
-    baseStatsList:
-        type: array
-    irregularStatsList:
-        type: array
-    untouchableStatsList:
-        type: array
-    abilitiesList:
-        type: array
-    moveList:
-        type: array    
+            battlerList:
+                type: object
+                patternProperties:
+                    ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                        type: object
+                        properties:
+                            displayName:
+                                type: string
+                            baseStats:
+                                type: object
+                                properties:
+                                    regularStats:
+                                        allOf:
+                                            - $ref: "#/definitions/baseStatDefinition"
+                                            - required:
+                                                  $data: "/referenceArrays/regularBaseStats"
+                                    irregularStats:
+                                        allOf:
+                                            - $ref: "#/definitions/baseStatDefinition"
+                                            - required:
+                                                  $data: "/referenceArrays/irregularBaseStats"
+                                    untouchableStats:
+                                        allOf:
+                                            - $ref: "#/definitions/baseStatDefinition"
+                                            - required:
+                                                  $data: "/referenceArrays/untouchableBaseStats"
+                                additionalProperties: false
+                            properties:
+                                type: object
+                                patternProperties:
+                                    ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                                        $ref: "#/definitions/customBattlerProperties"
+                                additionalProperties: false
+                            elementList:
+                                type: array
+                                items:
+                                    enum:
+                                        $data: "/referenceArrays/elements"
+                            abilityList:
+                                type: array
+                                items:
+                                    enum:
+                                        $data: "/referenceArrays/abilities"
+                            moveList:
+                                type: object
+                                patternProperties:
+                                    ^[0-9]{1,16}$:
+                                        oneOf:
+                                            - enum:
+                                                  $data: "/referenceArrays/moves"
+                                            - type: array
+                                              items:
+                                                  enum:
+                                                      $data: "/referenceArrays/moves"
+                                              minItems: 1
+                                minProperties: 1
+                                additionalProperties: false
+                        additionalProperties: false
+                        required:
+                            - displayName
+                            - baseStats
+                            - moveList
+                minProperties: 1
+                additionalProperties: false
+        additionalProperties: false
+    referenceArrays:
+        $ref: "#/definitions/referenceArraysObject"
 additionalProperties: false
 required:
-    - battlerList
-    
+    - battlers
+
 definitions:
     baseStatDefinition:
         type: object
         patternProperties:
-            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
                 type: integer
-    customProperties:
+        minProperties: 1
+        additionalProperties: false
+    battleFormulaEntry:
+        type: object
+        properties:
+            allowCustomFormulas:
+                type: boolean
+            flatValueException:
+                type: boolean
+            formulaList:
+                $ref: "#/definitions/formulaList"
+        additionalProperties: false
+        required: [allowCustomFormulas]
+        switch:
+            - if:
+                  properties:
+                      allowCustomFormulas:
+                          constant: true
+              then: true
+            - if:
+                  properties:
+                      allowCustomFormulas:
+                          constant: false
+              then:
+                  required: [flatValueException]
+              continue: true
+            - if:
+                  properties:
+                      allowCustomFormulas:
+                          constant: false
+                      flatValueException:
+                          constant: false
+              then:
+                  required: [formulaList]
+    customBattlerProperties:
         oneOf:
             - type: string
             - type: integer
             - type: array
               items:
+                  type: string
+            - type: array
+              items:
+                  type: integer
+            - type: array
+              items:
+                  type: array
+                  items:
+                      - type: string
+                      - type: integer
+                  additionalItems: false
+            - type: array
+              items:
+                  type: array
+                  items:
+                      - type: integer
+                      - type: integer
+                  additionalItems: false
+    customMoveProperties:
+        type: object
+        patternProperties:
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
                 type: string
-            - type: array
-              items:
+        additionalProperties: false
+    derivedStat:
+        type: object
+        properties:
+            derivedFormula:
+                type: string
+            range:
+                $ref: "#/definitions/rangeEntry"
+        additionalProperties: false
+        required:
+            - derivedFormula
+    effectTypeEntry:
+        type: object
+        patternProperties:
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                type: object
+                properties:
+                    displayName:
+                        $ref: "#/definitions/stringDisplayName"
+                    effectTiming:
+                        type: object
+                        properties:
+                            oncePerBattle:
+                                $ref: "#/definitions/resultsArray"
+                            startOfTurn:
+                                $ref: "#/definitions/resultsArray"
+                            midTurn:
+                                $ref: "#/definitions/resultsArray"
+                            endOfTurn:
+                                $ref: "#/definitions/resultsArray"
+                            swapIn:
+                                $ref: "#/definitions/resultsArray"
+                            swapOut:
+                                $ref: "#/definitions/resultsArray"
+                            enemySwapIn:
+                                $ref: "#/definitions/resultsArray"
+                            enemySwapOut:
+                                $ref: "#/definitions/resultsArray"
+                            beforeAttack:
+                                $ref: "#/definitions/resultsArray"
+                            afterAttack:
+                                $ref: "#/definitions/resultsArray"
+                            beforeEnemyAttack:
+                                $ref: "#/definitions/resultsArray"
+                            afterEnemyAttack:
+                                $ref: "#/definitions/resultsArray"
+                        minProperties: 1
+                        additionalProperties: false
+                additionalProperties: false
+                required:
+                    - displayName
+                    - effectTiming
+        minProperties: 1
+        additionalProperties: false
+    formulaList:
+        type: object
+        patternProperties:
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                type: string
+        minProperties: 1
+        additionalProperties: false
+    hpEntry:
+        type: object
+        properties:
+            useOn:
+                $ref: "#/definitions/useOnTypes"
+            formula:
+                type: string
+        additionalProperties: false
+        required:
+            - useOn
+            - formula
+    immunityEntry:
+        type: object
+        properties:
+            useOn:
+                $ref: "#/definitions/useOnTypes"
+            name:
+                enum:
+                    $data: "/referenceArrays/uniqueNames"
+            property:
+                type: string
+        additionalProperties: false
+        oneOf:
+            - required:
+                  - useOn
+                  - name
+            - required:
+                  - useOn
+                  - property
+    irregularStatComponent:
+        required:
+            - displayName
+            - statComponents
+    irregularDerived:
+        required:
+            - displayName
+            - derivedStat
+    itemsEntry:
+        type: object
+        patternProperties:
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                $ref: "#/definitions/resultsArray"
+        minProperties: 1
+        additionalProperties: false
+    moveStats:
+        type: object
+        patternProperties:
+            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                oneOf:
+                    - type: integer
+                    - type: "null"
+        additionalProperties: false
+        required:
+            $data: "/referenceArrays/moveStats"
+    rangeEntry:
+        type: object
+        properties:
+            min:
                 type: integer
-            - type: array
-              items:
-                type: array
-                items:
-                    - type: string 
-                    - type: integer
+            max:
+                type: integer
+                minimum:
+                    $data: "1/min"
+        additionalProperties: false
+        required:
+            - min
+            - max
+    rangeEntryAlwaysPositive:
+        type: object
+        properties:
+            min:
+                type: integer
+                minimum: 0
+                exclusiveMinimum: true
+            max:
+                type: integer
+                minimum:
+                    $data: "1/min"
+        additionalProperties: false
+        required:
+            - min
+            - max
+    referenceArray:
+        type: array
+        items:
+            type: string
+        uniqueItems: true
+    referenceArraysObject:
+        type: object
+        properties:
+            abilities:
+                $ref: "#/definitions/referenceArray"
+            damageFormulas:
+                $ref: "#/definitions/referenceArray"
+            damageMods:
+                $ref: "#/definitions/referenceArray"
+            delayedEffects:
+                $ref: "#/definitions/referenceArray"
+            elements:
+                $ref: "#/definitions/referenceArray"
+            irregularBaseStats:
+                $ref: "#/definitions/referenceArray"
+            matchupTypes:
+                $ref: "#/definitions/referenceArray"
+            moves:
+                $ref: "#/definitions/referenceArray"
+            moveStats:
+                $ref: "#/definitions/referenceArray"
+            regularBaseStats:
+                $ref: "#/definitions/referenceArray"
+            specialMods:
+                $ref: "#/definitions/referenceArray"
+            stageMods:
+                $ref: "#/definitions/referenceArray"
+            stats:
+                $ref: "#/definitions/referenceArray"
+            touchableStats:
+                $ref: "#/definitions/referenceArray"
+            uniqueNames:
+                $ref: "#/definitions/referenceArray"
+            untouchableBaseStats:
+                $ref: "#/definitions/referenceArray"
+        additionalProperties: false
+    resultFail:
+        enum: ["fail"]
+    resultsArray:
+        type: array
+        items:
+            $ref: "#/definitions/resultTypes"
+        minItems: 1
+    resultTypes:
+        type: object
+        properties:
+            msg:
+                type: string
+            damage:
+                type: object
+                properties:
+                    useOn:
+                        $ref: "#/definitions/useOnTypes"
+                    damageFormula:
+                        enum:
+                            $data: "/referenceArrays/damageFormulas"
                 additionalItems: false
-            - type: array
-              items:
-                type: array
-                items:
-                    - type: integer
-                    - type: integer
-                additionalItems: false     
+                required:
+                    - useOn
+                    - damageFormula
+            recoil:
+                type: integer
+                minimum: 0
+                exclusiveMinimum: true
+            heal:
+                $ref: "#/definitions/hpEntry"
+            setHP:
+                $ref: "#/definitions/hpEntry"
+            swap:
+                type: object
+                properties:
+                    useOn:
+                        $ref: "#/definitions/useOnTypes"
+                    randomSwap:
+                        type: boolean
+                additionalItems: false
+                required:
+                    - useOn
+                    - randomSwap
+            applyStageMod:
+                type: object
+                properties:
+                    useOn:
+                        $ref: "#/definitions/useOnTypes"
+                    targetStat:
+                        enum:
+                            $data: "/referenceArrays/touchableStats"
+                    stageMod:
+                        enum:
+                            $data: "/referenceArrays/stageMods"
+                    setStage:
+                        type: integer
+                    stageChange:
+                        type: integer
+                additionalProperties: false
+                oneOf:
+                    - required:
+                          - useOn
+                          - targetStat
+                          - stageMod
+                          - stageChange
+                    - required:
+                          - useOn
+                          - targetStat
+                          - stageMod
+                          - setStage
+            applySpecialMod:
+                $ref: "#/definitions/specialModEntry"
+            removeSpecialMod:
+                $ref: "#/definitions/specialModEntry"
+            setTimer:
+                type: object
+                properties:
+                    timerName:
+                        type: string
+                    timerDuration:
+                        type: integer
+                additionalProperties: false
+                required:
+                    - timerName
+                    - timerDuration
+            modifyTimer:
+                type: object
+                properties:
+                    timerName:
+                        type: string
+                    durationChange:
+                        type: integer
+                additionalProperties: false
+                required:
+                    - timerName
+                    - durationChange
+            removeTimer:
+                type: string
+            addDelayedEffect:
+                type: object
+                properties:
+                    useOn:
+                        $ref: "#/definitions/useOnTypes"
+                    delayedEffect:
+                        enum:
+                            $data: "/referenceArrays/delayedEffects"
+            addStatusEffect:
+                $ref: "#/definitions/statusEffectEntry"
+            removeStatusEffect:
+                $ref: "#/definitions/statusEffectEntry"
+            removeAllStatusEffects:
+                $ref: "#/definitions/useOnTypes"
+            addImmunity:
+                $ref: "#/definitions/immunityEntry"
+            removeImmunity:
+                $ref: "#/definitions/immunityEntry"
+            conditional:
+                type: object
+                properties:
+                    if:
+                        $ref: "#/definitions/statementIf"
+                    then:
+                        $ref: "#/definitions/statementThen"
+                    elseif:
+                        $ref: "#/definitions/statementElseIf"
+                    else:
+                        $ref: "#/definitions/statementThen"
+                additionalProperties: false
+                required:
+                    - if
+                    - then
+            random:
+                type: object
+                properties:
+                    probability:
+                        type: string
+                    result:
+                        $ref: "#/definitions/resultTypes"
+                additionalProperties: false
+                required:
+                    - probability
+                    - result
+        minProperties: 1
+        maxProperties: 1
+        additionalProperties: false
+    specialModEntry:
+        type: object
+        properties:
+            useOn:
+                $ref: "#/definitions/useOnTypes"
+            targetStat:
+                enum:
+                    $data: "/referenceArrays/touchableStats"
+            specialMod:
+                enum:
+                    $data: "/referenceArrays/specialMods"
+        additionalProperties: false
+        required:
+            - useOn
+            - targetStat
+            - specialMod
+    statComponentDefinition:
+        type: object
+        properties:
+            range:
+                $ref: "#/definitions/rangeEntry"
+        additionalProperties: false
+        required:
+            - range
+    statComponentsEntry:
+        type: object
+        properties:
+            baseValues:
+                $ref: "#/definitions/statComponentDefinition"
+            uniqueValues:
+                $ref: "#/definitions/statComponentDefinition"
+            statXP:
+                $ref: "#/definitions/statComponentDefinition"
+            finalStatValue:
+                type: object
+                properties:
+                    finalValueFormula:
+                        type: string
+                    range:
+                        $ref: "#/definitions/rangeEntry"
+                additionalProperties: false
+        additionalProperties: false
+        required:
+            - finalStatValue
+    statementElseIf:
+        type: object
+        properties:
+            if:
+                $ref: "#/definitions/statementIf"
+            then:
+                $ref: "#/definitions/statementThen"
+            elseif:
+                $ref: "#/definitions/statementElseIf"
+        additionalProperties: false
+        required:
+            - if
+            - then
+    statementIf:
+        type: string
+    statementIfLogic:
+        enum: ["or", "and"]
+    statementThen:
+        type: array
+        items:
+            $ref: "#/definitions/resultTypes"
+        minItems: 1
+    statusEffectEntry:
+        type: object
+        properties:
+            useOn:
+                $ref: "#/definitions/useOnTypes"
+            statusEffect:
+                $data: "/referenceArrays/statusEffects"
+        required:
+            - useOn
+            - statusEffect
+    stringAbbreviation:
+        pattern: ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$
+    stringDescriptionText:
+        type: string
+        maxLength: 300
     stringDisplayName:
         type: string
-        pattern: "^[\S]([\S ]{0,62}[\S]$|$)"
+        pattern: ^[\S]([\S ]{0,62}[\S]$|$)
+    targetTypes:
+        anyOf:
+            - enum: [Single, Single Foe, Single Partner]
+            - enum: [Single Adjacent, Single Adjacent Foe, Single Adjacent Partner]
+            - enum: [All, All Foes, All Partners]
+            - enum: [All Adjacent, All Adjacent Foes, All Adjacent Partners]
+            - enum: [Self, Self & Foe, Self & Adjacent Foe, Self & All Foes, Self & Adjacent Foes]
+            - enum: [Self & Partner, Self & Adjacent Partner, Self & All Partners, Self & Adjacent Partners]
+    tiltEntry:
+        type: string
+        enum:
+            $data: "/referenceArrays/stats"
+    tiltList:
+        type: array
+        items:
+            type: string
+            enum:
+                $data: "/referenceArrays/stats"
+        uniqueItems: true
+    useOnTypes:
+        enum: [target, user, userOnce]

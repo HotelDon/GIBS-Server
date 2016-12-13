@@ -1,134 +1,303 @@
-moveList:  
-    # Unique name, no spaces
-    moveName:
-        # The name of the move, as it's displayed to users. 
-        displayName:
-        # This is where move stats are defined. It must have an entry for every move stat defined in
-        # moveStats. Each stat can either have a numerical value or be blank, since all move stats 
-        # are optional, with one possible exception. 
-        stats:
-            # If mp is enabled, then this is where you define how much MP this move has. If MP is
-            # mandatory, then this field must have a number greater than 0. Otherwise, leaving it
-            # blank or setting it to zero will give it infinite MP. 
-            mp:
-            # Leaving a stat blank means it doesn't have this stat...
-            statName1: 
-            # And assigning a number to it means it does. 
-            statName2: 25
-            statName3: 400
-        # Properties are non-numerical values that a move can have. Since everything in properties 
-        # is optional, you can omit this block 
-        properties:
-            # Yes, even this is optional. A move without a success formula will always succeed. 
+moves:
+    # Move Points, or mp for short, is the system for limiting the number of times a move can be 
+    # used in a single battle. If enabled, then a battler can only moves as long as that move still
+    # has mp. Each move defines the maximum amount of mp it can have (which also serves as its 
+    # starting value). If the mp entry is omitted, then mp is disabled. Any mp entries will be ignored.
+    mp:
+        # Optional - The default display name is "Move Points", but you can change it to be more 
+        # flavorful if you want. The system will still refer to Move Points as mp, no matter what
+        # you name it.
+        displayName: "Move Points"
+        # If set to true, then all moves MUST have an MP entry. Otherwise, it's optional.
+        mandatory: true
+        # The min/max range for a move's max MP. Min can't be lower than 0, and probably 
+        # shouldn't ever be lower than 1. 
+        range:
+            min:
+            max:
+    # The full list of moves. 
+    moveList:
+        # Unique name, no spaces
+        moveName:
+            # The name of the move, as it's displayed to users. 
+            displayName:
+            # This is where the number of MP this move has is defined. If MP is disabled, this
+            # entry is ignored. If MP is mandatory, then this entry must be defined and not blank. 
+            # Otherwise, it's optional, and omitting it grants this move infinite MP.   
+            mp: 10
+            # This is where move stats are defined. It must have an entry for every move stat defined in
+            # moveStats. Each stat can either have a numerical value or be blank, since all move stats 
+            # are optional.
+            stats:
+                # Leaving a stat blank means it doesn't have this stat...
+                statName1: 
+                # And assigning a number to it means it does. 
+                statName2: 25
+                statName3: 400
+            # Optional - Used for calculating elemental affinity when attacking . Can have one element, or a list
+            # of elements. 
+            elements: 
+            # The target (or targets) of this move. See targets.md for more explanation of how targeting works. 
+            target: Single Foe
+            # Which formula the system will use to determine if a move was successful or not - 
+            # omitting this entry means this move will ALWAYS succeed. 
             successFormula:
-            # Optional. A move without an element ignores all elemental properties. 
-            element:
-            # The default target for this move - since it's possible for a move to have different
-            # targets depending on a variety of factors, this is the one that is shown to players
-            # when looking up move information. Leaving this blank instead means it will instead
-            # use the first target found in the success block. 
-            target:
-            # You can include any number of custom properties on a move. 
-            propertyName1:
-        # Here is where the meat of the move definitions come in, in one of four result blocks.
-        # Each result block is a list of actions that take effect in the order they are listed. 
-        # There are many different possibilities for actions, and they are described below.
-        # The first result type is the easiest to understand. Success is the block that is called
-        # when the success formula succeeds, or if there is no success formula defined, 
-        # it will always run first.  
-        success:
-              # The msg entry causes a message to be displayed to the player, and can be any string.
-              # This isn't always necessary for success, since damaging moves are obvious about
-              # their effects, but nonstandard moves can use it to inform the player of what is
-              # happening. 
-            - msg:
-              # The damage entry defines how the move damages the target. It takes an array with two
-              # items: the first is the target, and the second is a previously defined damage
-              # formula (or flat damage value, if that is allowed). The following is the list of
-              # target types: Foe Single, Foes Adjacient, Foes All, Single Any, All Adjacient, All, Self, Self
-              # Partner adjacient, Partner, Partner Adjacient, All Partners
-            - damage: [""]
-              # Sometimes, you'll want certain actions to be triggered only under certain conditions.
-              # A conditional entry will allow you to define the situations under which this action
-              # will trigger, and what that action will be. 
-            - conditional:
-                # Here is where you define the condition that your action will trigger under. 
-                # The if statement is technically a formula, although has slightly different rules;
-                # They are listed in the formula document. When a move encounters an if statement,
-                # it is evaluated and the result is given as either true or false. 
-                if: ""
-                # If the "if" entry evaluates to true, then the contents of "then" will execute. 
-                # If it evaluates to false then it is ignored. The contents of the "then" entry
-                # is essentially another result block, and can contain anything the main 
-                # results block does. You can even put another conditional statement inside of it, 
-                # if you need some super crazy conditional logic. 
-                then:
-                    - msg:
-                    - dmg:
-                # The elseIf entry is optional, and is only checked if the previous if statement  
-                # returns as false. It contains another set of if/then statements, and optionally
-                # can also have an elseif statement that follows the same rules, for however many
-                # layers deep you want to go. Protip: Less is more.
-                elseif:
+            # If turnOrder uses priority, then this is where you set the value for this moves priority.
+            # Must be an integer. Omitting this entry defaults the priority to 0. If turn order 
+            # doesn't use priority, then this entry is ignored if present, and can be safely omitted. 
+            priority: 0
+            # The customProperties entry lets to define any number of additional, non-numerical 
+            # values. These values can be referenced by other moves or effects. Custom properties
+            # are optional - you can omit this block if you have no additional properties to define. 
+            customProperties:
+                # You can include any number of custom properties on a move. 
+                propertyName1:
+            # Here is where the meat of the move definitions come in, in one of four result blocks.
+            # Each result block is a list of actions that take effect in the order they are listed. 
+            # There are many different possibilities for actions, and they are described below.
+            # The first result type is the easiest to understand. Success is the block that is called
+            # when the success formula succeeds, or if there is no success formula defined, 
+            # it will always run first.
+            success:
+                  # The msg entry causes a message to be displayed to the player, and can be any string.
+                  # This isn't always necessary for success, since damaging moves are obvious about
+                  # their effects, but nonstandard moves can use it to inform the player of what is
+                  # happening. 
+                - msg:
+                  # If you want your move to do damage (and in most cases, you do), then the damage 
+                  # entry defines how the move damages the target. 
+                - damage:
+                    # Allows you to specify who to apply this damage to - the three choices are target, 
+                    # user, and userOnce. Target means it will damage the battler who was targeted 
+                    # with this move. User means it will damage the user of this move (for damage, this
+                    # is a very niche use case, but self becomes more helpful for other entries).
+                    # For userOnce, it will only ever damage the user once, regardless of how many 
+                    # battler's are being targeted (since the entire move is executed for each target). 
+                    useOn: target
+                    # The damage formula you want to use to calcualte the damage done to the target.
+                    # If custom formulas are true, or if flatValueException is set to true, then 
+                    # instead 
+                    damageFormula: dmgFormula
+                  # Recoil deals damage to the user equal to a percentage of the damage they have 
+                  # just dealt. The percentage can't be negative. If you haven't dealt damage yet,
+                  # the recoil will always be zero. 
+                - recoil: 10
+                  # If you want your move to heal damage instead of (or in addition to) dealing it, 
+                  # then you'll want to define this entry. 
+                - heal:
+                    # Same as before, choose between target, self, and selfOnce. Target heals the 
+                    # target (in normal cases, the target should be set to a teammate - you can heal
+                    # an enemy battler if you really want to I guess), self heals yourself, and 
+                    # selfOnce will heal yourself only once, regardless of how many targets there are.
+                    useOn: self
+                    # The formula for deciding how much damage should be healed. See the formulas
+                    # section for the list of allowed variables. If this would add more HP than the
+                    # the max HP of the battler being healed, they are instead set to max. 
+                    # If the result is 0 or less, then the battler receives no healing. 
+                    formula: "maxHP*.5"
+                  # Similar to heal, but instead sets the targets current HP to the value of the 
+                  # formula supplied. 
+                - setHP: 
+                    # Same as heal. 
+                    useOn: Target
+                    # Uses the same formula rules as the heal entry. See the formula section for details.
+                    # If the result is 0 or less, then the battler is immediately knocked out.
+                    # If the result is greater than their max HP, they are set to max HP instead. 
+                    formula: "enemy.currentHP"
+                  # Lets a move force-swap someone
+                - swap:
+                    # Target, Self, selfOnce. Note that selfOnce is redundant, as each battler can
+                    # only swap once a turn anyways - The system will usually ignore this entry if
+                    # it runs again on the same turn. 
+                    useOn: Self
+                    # If set to false, then the trainer being forced to swap their battler(s) out 
+                    # will have a choice who to swap in. Otherwise, it's chosen randomly. 
+                    randomSwap: true
+                  # Allows a move to apply a stage mod to a stat.
+                - applyStageMod:
+                    # Target, self, or selfOnce.
+                    useOn: target
+                    # The stat you want to apply a stage mod to. 
+                    targetStat:
+                    # The name of the stageMod you want to apply. Remember, a single stat can only 
+                    # have one stage mod attached to it at a time. Applying a different one will
+                    # override the old one. 
+                    stageMod:
+                    # The entries stageChange and setStage are mutually exclusive - only one should 
+                    # be defined, depending on what you want to do. If stageChange is defined, then 
+                    # the current stage will be either increased (if positve) or decreased (if 
+                    # negative) by the number supplied. If this stat  currently has no stage mod (or
+                    # is overwriting a different stage mod), then the current stage is 0.  Keep in 
+                    # mind the min/max stage for the stage mod you are using.
+                    stageChange:
+                    # If setStage is defined, then it doesn't matter what the current stage is - this
+                    # will set it to the stage you specify (positve or negative). As before, keep
+                    # in mind the min/max stage of the stageMod you are using. 
+                    setStage:
+                  # Allows a move to apply a special mod to a stat. 
+                - applySpecialMod:
+                    # Target, Self, selfOnce
+                    useOn:
+                    # The stat you want to apply the special mod to. 
+                    targetStat:
+                    # The specialMod you want to apply to that stat. Note that if the stat already 
+                    # has this special mod, then this will do nothing. 
+                    specialMod:
+                  # Allows a move to remove a special mod from a stat. 
+                - removeSpecialMod:
+                    # Target, Self, selfOnce
+                    useOn:
+                    # The stat you want remove the special mod from. 
+                    targetStat:
+                    # The special mod you want to remove. If this stat doesn't have the special mod
+                    # applied, then this will do nothing. 
+                    specialMod:
+                  # Adds a timer that can be referenced by this or other moves, or by delayed effects. 
+                  # Trying to set a timer that already exists will override the timer with a new value. 
+                - setTimer:
+                    # Unique name, no spaces.
+                    timerName: 
+                    # The duration of the timer. Can be modified with the next entry, but by default,
+                    # this is the number of turns this timer will run for. 
+                    timerDuration:
+                  # If, for some reason, you need to change the duration of a timer after it has 
+                  # been set, you can do it with this entry. 
+                - modifyTimer:
+                    # The name of the timer you want to modify.
+                    timerName:
+                    # The number of turns (positive or negative) to change the timer.
+                    durationChange:
+                  # Removes a timer with the specified name. If no timer with that name exists, this
+                  # will intead do nothing.
+                - removeTimer: timerName
+                  # Lets you add a delayed effect, whose actions will be run at a later time.
+                  # Delayed effects let moves preform actions sometimes in the future, outside the 
+                  # normal attack window. The full details of how to make a delayed effect are in 
+                  # the effects document.
+                - addDelayedEffect: 
+                    # If set to self or selfOnce, the delayed effect will be attached to the user of 
+                    # this move and inheiret this move's target. If set to target, then each battler
+                    # targeted by this move will get the delayed effect attached to them, and target 
+                    # for each of those delayed effects will be set to none. If a battler swaps out, 
+                    # any delayed effects attached to them will be removed. 
+                    useOn: self
+                    # The name of the delayed effect you want to use. Must be defined in effects.  
+                    delayedEffect: delayedEffectName
+                  # Allows you to apply a status effect to the target. 
+                - addStatusEffect:
+                    # Target, self, or selfOnce
+                    useOn:
+                    # The name of the status effect you want to add.
+                    statusEffect:
+                  # Lets you remove a specific status effect.
+                - removeStatusEffect:
+                    # Target, self, or selfOnce
+                    useOn:
+                    # The status effect you want to remove.
+                    statusEffect:
+                  # Removes all status effects. Can either be used on Target, self, or selfOnce. 
+                - removeAllStatusEffects: Self
+                  # Allows you to make the target immune to stuff. 
+                - addImmunity:
+                    # Target, Self, and selfOnce
+                    useOn:
+                    # For the next three entries, you only need one of them per immunity entry.
+                    # Name lets you specify an immunity by it's unique name. This entry can 
+                    # grant immunity to anything with a unique name. 
+                    name:
+                    # Lets you name a property, and grant immunity to any move or battler with that
+                    # property. 
+                    property:
+                    # The list of stuff battlers can be immune to: 
+                    # damage, stage mods, special mods, damage mods, status effects, moves, all.
+                    immunityType:
+                  # If the target has an immunity, this removes it. If not, it does nothing. 
+                - removeImmunity:
+                    useOn:
+                    name:
+                    property:
+                  # Sometimes, you'll want certain actions to be triggered only under certain conditions.
+                  # A conditional entry will allow you to define the situations under which this action
+                  # will trigger, and what that action will be.
+                - conditional:
+                    # Here is where you define the condition that your action will trigger under. 
+                    # The if statement is technically a formula, although has slightly different rules;
+                    # They are listed in the formula document. When a move encounters an if statement,
+                    # it is evaluated and the result is given as either true or false. 
                     if: ""
-                    then: []
+                    # If the "if" entry evaluates to true, then the contents of "then" will execute. 
+                    # If it evaluates to false then it is ignored. The contents of the "then" entry
+                    # is essentially another result block, and can contain anything the main 
+                    # results block does, including more if statements.
+                    then:
+                        - msg:
+                        - dmg:
+                    # The elseIf entry is optional, and is only checked if the previous if statement  
+                    # returns as false. It contains another set of if/then statements, and optionally
+                    # can also have an elseif statement that follows the same rules, for however many
+                    # layers deep you want to go. Protip: Less is more.
                     elseif:
                         if: ""
                         then: []
-                # Optional. The else condition runs if no if statement ever returns as true.
-                # It is formatted the same as a then entry. 
-                else: []
-              # Random allows an effect to be trigged via random number generator.  
-            - random:
-                # The probability of this event being triggered. This can either be a flat number
-                # or a formula. Remember, probabilities should be numbers between 0 and 1, with 0
-                # being impossible, and 1 always triggering. If the event is supposed to be random,
-                # it should usually resolve to a number in between 0 and 1. 
-                probability:
-                # Same format as any other results block (It's even called "result" this time!).  
-                result:
-              # If a move stat is left undefined in the stats entry, or if you want to change
-              # the value of a stat in a conditional, you can do so in a results entry.
-              # You can not touch Battler stats in this way. 
-            - setStat: statName1 = 50
-              # Same goes for properties.
-            - propertyName1: propertyNameWhatever = "cool"
-            # The word "fail" by itself has a special meaning when put into the list of actions.
-            # If encountered, all subsequent entries in the list are ignored and the result
-            # transitions from the success entry to the failure entry. This ONLY happens in the
-            # success block; fail is rejected in all other blocks. Fail entries work best in 
-            # conditional or random results - a move that always fails for no reason is a joke.  
-            - fail
-        # Optional. The noSuccess entry defines what happens if a battler fails a success check 
-        # when using this move. If this block is undefined, then by default it will display a 
-        # default message and do nothing else. Defining the noSuccess entry means you can specify 
-        # more complex behavior if a move doesn't succeed, and/or override the default message. 
-        # If a move has no success formula defined, this block will never run.
-        noSuccess:
-            - msg:
-        # Also optional. Failure is a distinct result type from noSuccess. A move can succeed, but
-        # then fail for other reasons (for example, imagine trying to use a recovery move at full
-        # health). If the success block encounters a "fail" entry, the success block immediately
-        # stops, and the failure block starts. Like noSuccess, the failure block has a default
-        # message if undefined. Defining this entry allows you to add more complex behavior if a 
-        # move fails, and/or override the default message. 
-        failure:
-            - msg:
-        # Also optional. The noTarget entry runs when the field has no valid targets left for your
-        # move. A move that noTargets, by default, uses no MP and displays a message. By defining
-        # this entry, however, you can add more complex fallback behavior, or override the default
-        # message.
-        noTarget:
-    # The default block currently defines fallback messages so if a move doesn't define anything in
-    # a results block, the game can still display a message to avoid confusing the player. 
-    # In the future, it may define other default behavior as well.
-    default:
-        # Note that the default message for success, under normal circumstances, should never be seen. 
-        # Your moves should visably do something if they are successful, and should have a custom
-        # message displayed if it takes multiple turns to work or has some other nonstandard behavior. 
+                        elseif:
+                            if: ""
+                            then: []
+                    # Optional. The else condition runs if no if statement ever returns as true.
+                    # It is formatted the same as a then entry. 
+                    else: []
+                  # Random allows an effect to be trigged via random number generator.  
+                - random:
+                    # The probability of this event being triggered. This can either be a flat number
+                    # or a formula. Remember, probabilities should be numbers between 0 and 1, with 0
+                    # being impossible, and 1 always triggering. If the event is supposed to be random,
+                    # it should usually resolve to a number in between 0 and 1. 
+                    probability:
+                    # Same format as any other results block (It's even called "result" this time!).  
+                    result:
+                  # If a move stat is left undefined in the stats entry, or if you want to change
+                  # the value of a stat in a conditional, you can do so in a results entry.
+                  # You can not touch Battler stats in this way. 
+                - setStat: statName1 = 50
+                  # Same goes for properties.
+                - propertyName1: propertyNameWhatever = "cool"
+                # The word "fail" by itself has a special meaning when put into the list of actions.
+                # If encountered, all subsequent entries in the list are ignored and the result
+                # transitions from the success entry to the failure entry. This ONLY happens in the
+                # success block; fail is rejected in all other blocks. Fail entries work best in 
+                # conditional or random results - a move that always fails for no reason is a joke.  
+                - fail
+            # Optional. The noSuccess entry defines what happens if a battler fails a success check 
+            # when using this move. If this block is undefined, then by default it will display a 
+            # default message and do nothing else. Defining the noSuccess entry means you can specify 
+            # more complex behavior if a move doesn't succeed, and/or override the default message. 
+            # If a move has no success formula defined, this block will never run.
+            noSuccess:
+                - msg:
+            # Also optional. Failure is a distinct result type from noSuccess. A move can succeed, but
+            # then fail for other reasons (for example, imagine trying to use a recovery move at full
+            # health). If the success block encounters a "fail" entry, the success block immediately
+            # stops, and the failure block starts. Like noSuccess, the failure block has a default
+            # message if undefined. Defining this entry allows you to add more complex behavior if a 
+            # move fails, and/or override the default message. 
+            failure:
+                - msg:
+            # Also optional. The noTarget entry runs when the field has no valid targets left for your
+            # move. A move that noTargets, by default, uses no MP and displays a message. By defining
+            # this entry, however, you can add more complex fallback behavior, or override the default
+            # message.
+            noTarget:
+                - msg:
+    # The fallback block is optional. If a move tries to run a result block that isn't defined, it will 
+    # instead display a fallback message to avoid confusing the player. If you would like to override
+    # the default fallback messages (shown below) with your own, you can do so in this entry.
+    fallback:
+        # Note that the fallback message for success, under normal circumstances, should never be seen. 
+        # Your moves should do something if they are successful, and it should be obvious to players
+        # that something has happened. You can override the default fallback message here. 
         successMsg: "But it didn't do anything..."
-        # Conversely, for failure, nosuccess, and notarget, there isn't always a need to define 
-        # these blocks for a move, so the default messages are a useful fallback to save time.
+        # Conversely, for failure, nosuccess, and notarget, there isn't usually a need to define a
+        # unique version of these messages for every move, but you can still override the defaults
+        # with your own messages here. 
         noSuccessMsg: "But it missed!"
         failureMsg: "But it didn't work..."
         noTarget: "But there's nobody there!"
