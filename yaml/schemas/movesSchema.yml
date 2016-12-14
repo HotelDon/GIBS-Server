@@ -321,8 +321,6 @@ definitions:
                 $ref: "#/definitions/referenceArray"
             stageMods:
                 $ref: "#/definitions/referenceArray"
-            stats:
-                $ref: "#/definitions/referenceArray"
             touchableStats:
                 $ref: "#/definitions/referenceArray"
             uniqueNames:
@@ -570,13 +568,13 @@ definitions:
     tiltEntry:
         type: string
         enum:
-            $data: "/referenceArrays/stats"
+            $data: "/referenceArrays/touchableStats"
     tiltList:
         type: array
         items:
             type: string
             enum:
-                $data: "/referenceArrays/stats"
+                $data: "/referenceArrays/touchableStats"
         uniqueItems: true
     useOnTypes:
         enum: [target, user, userOnce]
