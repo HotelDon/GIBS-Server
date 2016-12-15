@@ -510,6 +510,7 @@ definitions:
         patternProperties:
             ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
                 type: string
+        minProperties: 1
         additionalProperties: false
     derivedStat:
         type: object
