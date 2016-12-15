@@ -154,7 +154,6 @@ properties:
                                 type: integer
                         additionalProperties: false
                         required:
-                            - regularStats
                             - untouchableStats
                     transitoryStats:
                         type: object
@@ -178,23 +177,8 @@ properties:
                     - permanentStats
             moveStats:
                 type: object
-                properties:
-                    mp:
-                        type: object
-                        properties:
-                            displayName:
-                                $ref: "#/definitions/stringDisplayName"
-                            mandatory:
-                                type: boolean
-                            range:
-                                $ref: "#/definitions/rangeEntry"
-                        additionalProperties: false
-                        required:
-                            - displayName
-                            - mandatory
-                            - range
                 patternProperties:
-                    ^(?!mp)([^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$):
+                    ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
                         type: object
                         properties:
                             displayName:
@@ -205,6 +189,7 @@ properties:
                         required:
                             - displayName
                             - range
+                minProperties: 1
                 additionalProperties: false
             successFormulas:
                 $ref: "#/definitions/battleFormulaEntry"
