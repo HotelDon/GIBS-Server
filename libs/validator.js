@@ -82,7 +82,7 @@ function validateSplitGameFile(systemObject, battlersObject, movesObject, effect
 
 function generateReferenceArrays(gameObject)
 {
-    var refArrayObject = {};
+    var refArraysObject = {};
     
     var refArrayList = ["abilities", "damageFormulas", "damageMods", "delayedEffects", "elements",
                         "irregularBaseStats", "matchupTypes", "moves", "moveStats", "regularBaseStats",
