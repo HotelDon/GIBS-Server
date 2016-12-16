@@ -1,0 +1,8 @@
+extends: default
+rules:
+    document-start:
+        level: warning
+        present: false
+    indentation:
+        spaces: 4
+    line-length: disable
