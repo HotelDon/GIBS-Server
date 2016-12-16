@@ -6,15 +6,18 @@ moves:
             max: 40
     moveList:
         sting:
-            displayName: "String"
+            displayName: Sting
+            target: Single Foe
             stats:
                 mp: 30
                 mAcc: 100
                 pow: 30
-            properties:
+            customProperties:
                 successFormula: regularAttack
                 element: wind
                 target: opponent
             success:
-                - damage: [Foe Single, physicalDamage]
-                - msg: "Hope you aren't allergic!"
+                - damage:
+                      useOn: target
+                      damageFormula: physicalDamage
+                - msg: Hope you aren't allergic!

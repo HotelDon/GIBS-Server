@@ -17,4 +17,4 @@ battlers:
             elementList:
                 - wind
             moveList:
-                0: "sting"
+                0: sting

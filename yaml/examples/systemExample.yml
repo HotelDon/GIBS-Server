@@ -172,7 +172,8 @@ system:
                         minStage: 0
                         maxStage: 3
             specialMods:
-                modList:
+                persists: true
+                specialModList:
                     flatMod:
                         modifierType: Flat
                         modifierValue: -15
