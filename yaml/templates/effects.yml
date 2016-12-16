@@ -1,0 +1,152 @@
+# The effects entry covers a wide array of features you can add to your system, but they each
+# essentially provide the same things in different contexts. If the entries for abilities,
+# statusEffects, triggers, equipment, and/or items are present, then they are enabled. If they are 
+# not present, then they are disabled. 
+effects:
+    # Abilities are tied specifically to battlers, and each battlerType has a different list of 
+    # abilities to choose from. Abilities are active each turn unless nullified by something else.
+    # The default target for all abilities is none (keep in mind for this and other effects, 
+    # targets can be changed after the fact).  
+    abilities:
+        # The unique abbreviation for the ability's name. 
+        # Note: 
+        abilityName:
+            # The full display name, shown to players.
+            displayName:
+            # An effect can take place anytime a move isn't actively being executed. This is where 
+            # you defined the timing for those effects. Each timing entry contains a list formatted
+            # like the results block of a move. During each phase of combat, the game checks if any 
+            # abilities, statuses, triggers, or equipment have effects defined that happen during 
+            # that phase. The different timing categories determine if the effect happens zero, once,
+            # or more times per turn. You can have as many or as few  effects, in as many or as few
+            # categories as you wish. The effecTiming entry is mandatory, and can't be left blank.
+            # The entries inside effecTiming that aren't used can be ommitted, but not left blank. 
+            effectTiming:
+                # Only triggers once per battle - will trigger on first swap in or start of battle if 
+                # this battler is the lead. 
+                oncePerBattle:
+                # This block always runs at the start of the turn.
+                startOfTurn:
+                # This block always runs in between attacks, regardless of who attacked first or the
+                # number of attackers. 
+                midTurn:
+                # This block always runs at the end of the turn. 
+                endOfTurn:
+                # This block always triggers after the battler swaps into the battle, or the very first
+                # turn if they are your lead battler.
+                swapIn:
+                # This block always triggers before the battler swaps out of battle. 
+                swapOut:
+                # This block always triggers after an opponent swaps in.
+                enemySwapIn:
+                # This block always triggers when an opponent swaps out. 
+                enemySwapOut:
+                # This block always runs before your attack is executed, regardless of when you attack.
+                beforeAttack:
+                # This block always runs after your attack is executed, regardless of when you attack.
+                afterAttack:
+                # This block always runs before an enemy attacks, regardless of when they attack. 
+                beforeEnemyAttack:
+                # This block always runs after an enemy attacks, regardless of when they attack.  
+                afterEnemyAttack:
+                # This block always runs when a battler loses this effect. You can use it to undo any
+                # permanent changes you've made in other timing entries. 
+                cleanup:
+        # Using a seperate entry for examples since the comments above are already a bit cluttered.
+        exampleAbility:
+    # Status effects are applied to battlers by moves (or other effects), and players will always 
+    # know if a battler has a status effect or not. A battler with a status effect will be subjected
+    # to its effects every turn until removed. Status effects can be removed by other effects or by
+    # themselves. The default target for status effects are set to none. 
+    statusEffects:
+        statusName:
+            displayName:
+            # Status effects use the same timing categories.
+            effectTiming:
+                oncePerBattle:
+                startOfTurn:
+                midTurn:
+                endOfTurn:
+                swapIn:
+                swapOut:
+                enemySwapIn:
+                enemySwapOut:
+                beforeAttack:
+                afterAttack:
+                beforeEnemyAttack:
+                afterEnemyAttack:
+                cleanup:
+    # Delayed effects are used to let moves preform actions outside the normal timing of the 
+    # battler's turn. Normally, when a move is executed, everything is executed all at once.
+    # But if the move sets a delayed effect, you can have moves preform actions during other times.
+    # As such, delayed effects only trigger once by default, but a delayed effect can also reset 
+    # itself multiple times until some condition is met. Delayed effects are attached onto battlers, 
+    # and if they swap out, they will become unnattached. The default target for a delayed effect is
+    # determined by the move that sets it. 
+    delayedEffects:
+        delayName:
+            displayName:
+            effectTiming:
+                oncePerBattle:
+                startOfTurn:
+                midTurn:
+                endOfTurn:
+                swapIn:
+                swapOut:
+                enemySwapIn:
+                enemySwapOut:
+                beforeAttack:
+                afterAttack:
+                beforeEnemyAttack:
+                afterEnemyAttack:
+                cleanup:
+    # Unlike other effects, battlefield effects aren't attached directly to battlers. Instead, they 
+    # are attached directly the battlefield. Any battler that enters the battlefield will be subjected
+    # to its effects, as if it were a status effect attached to them. 
+    battlefieldEffect:
+        # Unique name, obvs.
+        bfEffectName:
+            # Display name. 
+            displayName:
+            # Note the different effect timing names. Also note 
+            effectTiming:
+                oncePerBattle:
+                startOfTurn:
+                midTurn:
+                endOfTurn:
+                swapIn:
+                swapOut:
+                enemySwapIn:
+                enemySwapOut:
+                beforeAttack:
+                afterAttack:
+                beforeEnemyAttack:
+                afterEnemyAttack:  
+                cleanup:
+    # Equipment are like abilities, but can (usually) be swapped freely between battlers. Otherwise, 
+    # they function exactly the same. Note: Any instance of "useOn: target" will target the battler
+    # using the equipment by default. 
+    equipment:
+        equipmentName:
+            displayName:
+            effectTiming:
+                oncePerBattle:
+                startOfTurn:
+                midTurn:
+                endOfTurn:
+                swapIn:
+                swapOut:
+                enemySwapIn:
+                enemySwapOut:
+                beforeAttack:
+                afterAttack:
+                beforeEnemyAttack:
+                afterEnemyAttack:
+                cleanup:
+    # Unlike other effect types, item effects always happen instantaneously. In all other respects, 
+    # items work the same way as other effects. Note: Any instance of "useOn: target" will target
+    # the battler the item is being used on. 
+    items:
+        itemName:
+            displayName:
+            effectList:
