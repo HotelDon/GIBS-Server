@@ -309,7 +309,7 @@ system:
                 #  all stage mods will reset to stage zero after a swap. 
                 persists: false
                 # The full list of stat mods. 
-                statModList:
+                stageModList:
                     # Mod types must have unique names. No spaces. 
                     mod1:
                         # Must be an integer. This value is multiplied by the current stage to get the mods
