@@ -1,11 +1,13 @@
 effects:
     abilities:
         insomniac:
-            oncePerBattle:
-                - addImmunity:
-                    useOn: self
-                    name: "sleep"
-            cleanup:
-                - removeImmunity:
-                    useOn: self
-                    name: "sleep"
+            displayName: "Insomniac"
+            effectTiming:
+                oncePerBattle:
+                    - addImmunity:
+                        useOn: self
+                        name: "sleep"
+                cleanup:
+                    - removeImmunity:
+                        useOn: self
+                        name: "sleep"

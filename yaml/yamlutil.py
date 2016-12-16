@@ -1,8 +1,8 @@
 import sys
 
-battlersSchemaFile = "./schemas/battlersSchema.yml"
-movesSchemaFile = "./schemas/movesSchema.yml"
-effectsSchemaFile = "./schemas/effectsSchema.yml"
+battlersSchemaFile = sys.path[0] + "/schemas/battlersSchema.yml"
+movesSchemaFile = sys.path[0] + "/schemas/movesSchema.yml"
+effectsSchemaFile = sys.path[0] + "/schemas/effectsSchema.yml"
 
 battlersStartString = "    battlers:\n"
 movesStartString = "    moves:\n"
@@ -47,7 +47,7 @@ def combineSchemas():
 
     fullText = ""
     
-    with open("./schemas/systemSchema.yml") as systemSchema:
+    with open(sys.path[0]+"/schemas/systemSchema.yml") as systemSchema:
         fullText = systemSchema.readlines()
         
     for schema in schemas:
@@ -57,7 +57,7 @@ def combineSchemas():
         insertAt = getLineNumber(fullText, definitionsString) - 1
         fullText.insert(insertAt, schema["requiredString"])
     
-    with open("./schemas/gameSchema.yml", "w") as fullSchema:
+    with open(sys.path[0]+"/schemas/gameSchema.yml", "w") as fullSchema:
         fullSchema.writelines(fullText)        
 
 def getLineNumber(textList, line):
@@ -82,7 +82,7 @@ def getText(fileName, startLine, endLine):
 
 def updateSchemas():
     definitionText = ""
-    with open("./schemas/systemSchema.yml") as systemSchema:
+    with open(sys.path[0]+"/schemas/systemSchema.yml") as systemSchema:
         fullText = systemSchema.readlines()
         lineNumber = getLineNumber(fullText, "definitions:\n")
         definitionText = fullText[lineNumber:]
