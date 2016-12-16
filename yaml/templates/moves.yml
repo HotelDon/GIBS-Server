@@ -68,7 +68,7 @@ moves:
                   # entry defines how the move damages the target. 
                 - damage:
                     # Allows you to specify who to apply this damage to - the three choices are target, 
-                    # user, and userOnce. Target means it will damage the battler who was targeted 
+                    # self, and selfOnce. Target means it will damage the battler who was targeted 
                     # with this move. User means it will damage the user of this move (for damage, this
                     # is a very niche use case, but self becomes more helpful for other entries).
                     # For userOnce, it will only ever damage the user once, regardless of how many 
@@ -99,14 +99,14 @@ moves:
                   # formula supplied. 
                 - setHP: 
                     # Same as heal. 
-                    useOn: Target
+                    useOn: target
                     # Uses the same formula rules as the heal entry. See the formula section for details.
                     # If the result is 0 or less, then the battler is immediately knocked out.
                     # If the result is greater than their max HP, they are set to max HP instead. 
                     formula: "enemy.currentHP"
                   # Lets a move force-swap someone
                 - swap:
-                    # Target, Self, selfOnce. Note that selfOnce is redundant, as each battler can
+                    # target, self, selfOnce. Note that selfOnce is redundant, as each battler can
                     # only swap once a turn anyways - The system will usually ignore this entry if
                     # it runs again on the same turn. 
                     useOn: Self
@@ -115,7 +115,7 @@ moves:
                     randomSwap: true
                   # Allows a move to apply a stage mod to a stat.
                 - applyStageMod:
-                    # Target, self, or selfOnce.
+                    # target, self, or selfOnce.
                     useOn: target
                     # The stat you want to apply a stage mod to. 
                     targetStat:
@@ -136,7 +136,7 @@ moves:
                     setStage:
                   # Allows a move to apply a special mod to a stat. 
                 - applySpecialMod:
-                    # Target, Self, selfOnce
+                    # target, Self, selfOnce
                     useOn:
                     # The stat you want to apply the special mod to. 
                     targetStat:
@@ -145,7 +145,7 @@ moves:
                     specialMod:
                   # Allows a move to remove a special mod from a stat. 
                 - removeSpecialMod:
-                    # Target, Self, selfOnce
+                    # target, Self, selfOnce
                     useOn:
                     # The stat you want remove the special mod from. 
                     targetStat:
@@ -185,13 +185,13 @@ moves:
                     delayedEffect: delayedEffectName
                   # Allows you to apply a status effect to the target. 
                 - addStatusEffect:
-                    # Target, self, or selfOnce
+                    # target, self, or selfOnce
                     useOn:
                     # The name of the status effect you want to add.
                     statusEffect:
                   # Lets you remove a specific status effect.
                 - removeStatusEffect:
-                    # Target, self, or selfOnce
+                    # target, self, or selfOnce
                     useOn:
                     # The status effect you want to remove.
                     statusEffect:
@@ -199,7 +199,7 @@ moves:
                 - removeAllStatusEffects: Self
                   # Allows you to make the target immune to stuff. 
                 - addImmunity:
-                    # Target, Self, and selfOnce
+                    # target, Self, and selfOnce
                     useOn:
                     # For the next three entries, you only need one of them per immunity entry.
                     # Name lets you specify an immunity by it's unique name. This entry can 
