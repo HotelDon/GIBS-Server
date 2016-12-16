@@ -1,0 +1,20 @@
+moves:
+    mp:
+        mandatory: true
+        range:
+            min: 5
+            max: 40
+    moveList:
+        sting:
+            displayName: "String"
+            stats:
+                mp: 30
+                mAcc: 100
+                pow: 30
+            properties:
+                successFormula: regularAttack
+                element: wind
+                target: opponent
+            success:
+                - damage: [Foe Single, physicalDamage]
+                - msg: "Hope you aren't allergic!"

@@ -1,0 +1,20 @@
+battlers:
+    default:
+        defaultMove: Flail
+    battlerList:
+        dumbee:
+            displayName: Dumbee
+            baseStats:
+                regularStats:
+                    str: 30
+                    end: 40
+                    agi: 60
+                    per: 65
+                irregularStats:
+                    test3: 15
+                untouchableStats:
+                    HP: 80
+            elementList:
+                - wind
+            moveList:
+                0: "sting"
