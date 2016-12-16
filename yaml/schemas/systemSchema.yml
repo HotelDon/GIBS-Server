@@ -944,4 +944,4 @@ definitions:
                 $data: "/referenceArrays/touchableStats"
         uniqueItems: true
     useOnTypes:
-        enum: [target, user, userOnce]
+        enum: [target, self, selfOnce]
