@@ -1,22 +1,28 @@
 import sys
 
 battlersSchema = {
-    "file": sys.path[0] + "/schemas/battlersSchema.yml", 
+    "file": sys.path[0] + "/schemas/battlersSchema.yml",
     "startString": "    battlers:\n", 
     "requiredString": "    - battlers\n"
 }
 movesSchema = {
-    "file": sys.path[0] + "/schemas/movesSchema.yml", 
-    "startString": "    moves:\n", 
+    "file": sys.path[0] + "/schemas/movesSchema.yml",
+    "startString": "    moves:\n",
     "requiredString": "    - moves\n"
 }
 effectsSchema = {
-    "file": sys.path[0] + "/schemas/effectsSchema.yml", 
+    "file": sys.path[0] + "/schemas/effectsSchema.yml",
     "startString": "    effects:\n", 
     "requiredString": "    - effects\n"
 }
 
 schemas = [battlersSchema, movesSchema, effectsSchema]
+examples = [
+    sys.path[0] + "/examples/systemExample.yml",
+    sys.path[0] + "/examples/battlersExample.yml",
+    sys.path[0] + "/examples/movesExample.yml",
+    sys.path[0] + "/examples/effectsExample.yml" 
+]
 
 endString = "    referenceArrays:\n"
 definitionsString = "definitions:\n"
@@ -69,6 +75,12 @@ def combineSchemas():
     with open(sys.path[0]+"/schemas/gameSchema.yml", "w") as fullSchema:
         fullSchema.writelines(fullText)        
 
+def combineExamples():  
+    with open(sys.path[0]+"/examples/gameExample.yml", "w") as gameExample: 
+        for example in examples:
+            with open(example) as exampleFile:
+                gameExample.writelines(exampleFile.readlines())
+
 def getLineNumber(textList, line):
     for lineNumber, lineText in enumerate(textList):
         if (line == lineText):
@@ -88,6 +100,7 @@ def getText(fileName, startLine, endLine):
                 foundStart = True
                 result = result + line     
         return result
+
 if __name__ == "__main__":
     try:
         main(sys.argv[1]);
