@@ -1,0 +1,329 @@
+system:
+    info:
+        name: "Test System"
+        description: "This system is for testing validation and game execution code."
+    battlerStats:
+        permanentStats:
+            regularStats:
+                regularStatList:
+                    str:
+                        displayName: "Strength" 
+                    end:
+                        displayName: "Endurance"
+                    per:
+                        displayName: "Perception"
+                    agi:
+                        displayName: "Agility"
+                statComponents:
+                    baseValues:
+                        range:
+                            min: 5
+                            max: 100
+                    uniqueValues: 
+                        range:
+                            min: 1
+                            max: 25
+                    statXP: 
+                        range:
+                            min: 0
+                            max: 100
+                    finalStatValue:
+                        finalValueFormula: "floor(((baseValues*3) + (uniqueValues*2) + (statXP/4))*lvl)"
+                        range:
+                            min: 10
+                            max: 500  
+            irregularStats:
+                speed:
+                    displayName: "Speed"
+                    derivedStat:
+                        derivedFormula: "(agi+end)/2"
+                        range:
+                            min: 10
+                            max: 500
+                luck:
+                    displayName: "Luck"
+                    statComponents:
+                        uniqueValues:
+                            range:
+                                min: 0
+                                max: 10
+                        finalStatValue:
+                            finalValueFormula: "uniqueValue"
+                            range:
+                                min: 0
+                                max: 10
+                test3:
+                    displayName: "Test"
+                    statComponents:
+                        baseValues:
+                            range:
+                                min: 0
+                                max: 15
+                        finalStatValue:
+                            finalValueFormula: "baseValue"
+                            range:
+                                min: 0
+                                max: 15
+            untouchableStats:
+                lvl:
+                    displayName: "Level"
+                    levelUpFormula: "lvl^2"
+                    range:
+                        min: 1
+                        max: 100
+                HP:
+                    displayName: "Hit Points"
+                    statComponents:
+                        baseValues:
+                            range:
+                                min: 0
+                                max: 200
+                        uniqueValues:
+                            range:
+                                min: 0
+                                max: 50
+                        statXP:
+                            range:
+                                min: 0
+                                max: 100
+                        finalStatValue:
+                            finalValueFormula: "(((baseValue + uniqueValue + (statXP/4))/50)*lvl)+10"
+                            range:
+                                min: 0
+                                max: 1000
+                mood:
+                    displayName: "test3"
+                    statComponents:
+                        statXP:
+                            range:
+                                min: 0
+                                max: 100
+                        finalStatValue:
+                            finalValueFormula: "statXP"
+                            range:
+                                min: 0
+                                max: 100
+            statTilts:
+                displayName: "Personality"
+                tiltType: Percentage
+                tiltValue: 5
+                tiltList:
+                    strUpEndDown:
+                        displayName: "Rough"
+                        positiveTilt: str
+                        negativeTilt: end
+                    multiUpOneDown:
+                        displayName: "Shy"
+                        positiveTilt: per
+                        negativeTilt: [str, end]
+                    weirdTilt:
+                        displayName: "Weird"
+                        positiveTilt: [per, end]
+                        negativeTilt: agi
+                    mindfulTilt:
+                        displayName: "Mindful"
+                        positiveTilt: per
+                    shittyTilt:
+                        displayName: "Shitty"
+                        negativeTilt: agi
+            maxTotalStatXP: 500      
+        transitoryStats:
+            bAcc:
+                displayName: "Accuracy"
+                startingValue: 100
+                range:
+                    min: 0
+                    max: 100
+    moveStats:
+        mAcc:
+            displayName: "Accuracy"
+            range:
+                min: 0
+                max: 100
+        pow:
+            displayName: "Power"
+            range:
+                min: 0
+                max: 255
+    successFormulas:
+        allowCustomFormulas: false
+        flatValueException: false
+        formulaList:
+            regularAttack: "(mAcc * bAcc)/100"
+    damageFormulas:
+        allowCustomFormulas: false
+        flatValueException: true
+        formulaList:
+            physicalDamage: "((2*lvl)/200)(str/end)(pow)"
+            rangedDamage: "((2*lvl)/200)(per/agi)(pow)"
+    mods:
+        statMods:
+            stageMods:
+                persists: false
+                stageModList:
+                    regularStage:
+                        baseModifier: 10
+                        modifierType: Percentage
+                        minStage: -5
+                        maxStage: 5
+                    neverBadFlatStage:
+                        baseModifier: 20
+                        modifierType: Flat
+                        minStage: 0
+                        maxStage: 3
+            specialMods:
+                persists: true
+                specialModList:
+                    flatMod:
+                        modifierType: Flat
+                        modifierValue: -15
+                    percentageMod:
+                        modifierType: Percentage
+                        modifierValue: 50
+        damageMods:
+            elementAffinity:
+                modType: Percentage
+                modValue: 50
+            elementGood:
+                modType: Percentage
+                modValue: 10
+            elementSuperGood:
+                modType: Percentage
+                modValue: 30
+            elementBad:
+                modType: Percentage
+                modValue: -10
+            elementSuperBad:
+                modType: Percentage
+                modValue: -30
+        damageVariance:
+                modType: Flat
+                range:
+                    min: -25
+                    max: 25
+        stackOrder: FPM
+    elements:
+        elementalAffinity: "elementAffinity"
+        matchupTypes:
+            good:
+                displayName: "Weak"
+                matchupResult: "elementGood"
+            superGood:
+                displayName: "Very Weak"
+                matchupResult: "elementSuperGood"
+            bad:
+                displayName: "Resist"
+                matchupResult: "elementBad"
+            superBad:
+                displayName: "Heavy Resist"
+                matchupResult: "elementSuperBad"
+        elementList:
+            earth:
+                displayName: "Earth"
+                matchups:
+                    good: 
+                    superGood: "fire"
+                    bad: ["water", "earth"]
+                    superBad: 
+            fire:
+                displayName: "Fire"
+                matchups:
+                    good:
+                    superGood: "heart"
+                    bad: "earth"
+                    superBad: "water"
+            wind:
+                displayName: "Wind"
+                matchups:
+                    good: "earth"
+                    superGood: 
+                    bad: 
+                    superBad: "fire"
+            water:
+                displayName: "Water"
+                matchups:
+                    good: 
+                    superGood: ["fire", "earth"]
+                    bad: "wind"
+                    superBad: 
+            heart:
+                displayName: "Heart"
+                matchups:
+                    good:
+                    superGood:
+                    bad:
+                    superBad: ["fire", "wind", "earth", "water"]
+    turnOrder:
+        orderType: "Both"
+        priorityType: "Absolute"
+        orderFormula: "speed"
+    criticals:
+        overrideSuccessCheck: true
+        ignoreStatMods: false
+        critRateFormula: "luck/200"
+    misc:
+        maxTeamSize: 6
+        maxMoves: 4
+        levelRestriction: Strict
+battlers:
+    default:
+        defaultMove: Flail
+    battlerList:
+        dumbee:
+            displayName: Dumbee
+            baseStats:
+                regularStats:
+                    str: 30
+                    end: 40
+                    agi: 60
+                    per: 65
+                irregularStats:
+                    test3: 15
+                untouchableStats:
+                    HP: 80
+            elementList:
+                - wind
+            moveList:
+                0: sting
+moves:
+    mp:
+        mandatory: true
+        range:
+            min: 5
+            max: 40
+    moveList:
+        sting:
+            displayName: Sting
+            target: Single Foe
+            stats:
+                mp: 30
+                mAcc: 100
+                pow: 30
+            customProperties:
+                successFormula: regularAttack
+                element: wind
+                target: opponent
+            success:
+                - damage:
+                      useOn: target
+                      damageFormula: physicalDamage
+                - msg: Hope you aren't allergic!
+effects:
+    abilities:
+        insomniac:
+            displayName: Insomniac
+            effectTiming:
+                oncePerBattle:
+                    - addImmunity:
+                        useOn: self
+                        name: sleep
+                cleanup:
+                    - removeImmunity:
+                        useOn: self
+                        name: sleep
+    statusEffects:
+        sleep:
+            displayName: Sleep
+            effectTiming:
+                startOfTurn:
+                    - msg: You're asleep
