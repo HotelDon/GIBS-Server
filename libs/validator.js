@@ -34,8 +34,9 @@ function validateGameFile(gameObject)
     if (gameValidator(gameObject))
     {
         gameObject.referenceArrays = generateReferenceArrays(gameObject);
+        console.log(gameObject.referenceArrays);
         
-        let results = gameValidator(battlers);
+        let results = gameValidator(gameObject);
         
         if(results)
         {
@@ -49,7 +50,8 @@ function validateGameFile(gameObject)
     }
     else
     {
-        return gameValidator.errors;
+        console.log(gameValidator.errors)
+        return false;
     }
 }
 
@@ -86,14 +88,14 @@ function generateReferenceArrays(gameObject)
     
     var refArrayList = ["abilities", "damageFormulas", "damageMods", "delayedEffects", "elements",
                         "irregularBaseStats", "matchupTypes", "moves", "moveStats", "regularBaseStats",
-                        "specialMods", "stageMods", "touchableStats", "uniqueKeys", "untouchableBaseStats"];
+                        "specialMods", "stageMods", "touchableStats", "uniqueNames", "untouchableBaseStats"];
     
     for (let i = 0; i < refArrayList.length; i++)
     {
-        refArraysObject[refArrayList[i]] = fetchReference(refArrayList[i]);
+        refArraysObject[refArrayList[i]] = fetch(refArrayList[i]);
     }
     
-    return referenceArrayObject;
+    return refArraysObject;
     
     function fetch(fetchTarget)
     {
@@ -213,9 +215,9 @@ function generateReferenceArrays(gameObject)
                 }
                 return keysArray;
             case "moves":
-                if(gameObject.moves.movesList)
+                if(gameObject.moves.moveList)
                 {
-                    return Object.keys(gameObject.moves.movesList);
+                    return Object.keys(gameObject.moves.moveList);
                 }
                 break;
             case "battlers":
@@ -283,7 +285,7 @@ function generateReferenceArrays(gameObject)
                 keysArray = keysArray.concat(fetch("moves"));
                 return keysArray;
             default:
-                throw "Validator function \"fetch\" trying to fetch something that doesn't exist!";
+                throw "Validator function \"fetch\" trying to fetch something that doesn't exist: "+fetchTarget;
         }
         
         return keysArray;
