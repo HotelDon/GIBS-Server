@@ -5,23 +5,10 @@ var ajv = new Ajv({v5: true});
 var yaml = require("yamljs");
 var fs = require("fs");
 
-var systemSchema = loadSchemaFile("systemSchema");
-var battlersSchema = loadSchemaFile("battlersSchema");
-var movesSchema = loadSchemaFile("movesSchema");
-var effectsSchema = loadSchemaFile("effectsSchema");
 var gameSchema = loadSchemaFile("gameSchema");
-
-var systemValidator = ajv.compile(systemSchema);
-var battlerValidator = ajv.compile(battlersSchema);
-var moveValidator = ajv.compile(movesSchema);
-var effectsValidator = ajv.compile(effectsSchema);
 var gameValidator = ajv.compile(gameSchema);
 
-var testSystem = loadExampleFile("systemExample");
-var testMoves =  loadExampleFile("movesExample");
-var testBattlers = loadExampleFile("battlersExample");
-var testEffects = loadExampleFile("effectsExample");
-var testGame = Object.assign({}, testSystem, testMoves, testBattlers, testEffects);
+var testGame = loadExampleFile("gameExample");
 
 var blankMoves = {"moves": {}};
 var blankBattler = {"battlers": {}};
@@ -291,8 +278,6 @@ function generateReferenceArrays(gameObject)
         return keysArray;
     } 
 }
-
-
 
 function loadSchemaFile(schemaName) 
 {
