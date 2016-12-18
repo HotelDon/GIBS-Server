@@ -10,9 +10,10 @@ var gameValidator = ajv.compile(gameSchema);
 
 var testGame = loadExampleFile("gameExample");
 
-var blankMoves = {"moves": {}};
-var blankBattler = {"battlers": {}};
-var blankEffects = {"effects": {}};
+// Not sure if it's worth switching to immutible.js for three variables. Sticking with conts for now
+const blankMoves = {"moves": {}};
+const blankBattler = {"battlers": {}};
+const blankEffects = {"effects": {}};
 
 console.log(validateGameFile(testGame));
 
