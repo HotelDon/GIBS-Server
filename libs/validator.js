@@ -127,24 +127,25 @@ function generateReferenceArrays(gameObject)
     function fetch(fetchTarget)
     {
         const system = gameObject.system;
-        const permStats = system.battlerStats.permanentStats;
+        const gameProperties = gameObject.gameProperties;
+        const permanentStats = system.battlerStats.permanentStats;
         
         let keysArray = [];
         
         switch (fetchTarget)
         {
             case "regularStats":
-                if(permStats.regularStats)
+                if(permanentStats.regularStats)
                 {
-                    return Object.keys(permStats.regularStats.regularStatList);
+                    return Object.keys(permanentStats.regularStats.regularStatList);
                 }
                 break;
             case "irregularStats":
             case "untouchableStats":
             case "statTilts":
-                if (permStats[fetchTarget])
+                if (permanentStats[fetchTarget])
                 {
-                    return Object.keys(permStats[fetchTarget]);
+                    return Object.keys(permanentStats[fetchTarget]);
                 }
                 break;
             case "transitoryStats":
@@ -208,9 +209,9 @@ function generateReferenceArrays(gameObject)
                 }
                 break;
             case "regularBaseStats":
-                if(permStats.regularStats)
+                if(permanentStats.regularStats)
                 {
-                    if(permStats.regularStats.statComponents.baseValues)
+                    if(permanentStats.regularStats.statComponents.baseValues)
                     {
                         keysArray = keysArray.concat(fetch("regularStats"));
                         return keysArray;
@@ -219,11 +220,11 @@ function generateReferenceArrays(gameObject)
                 }
                 break;
             case "irregularBaseStats":
-                for(let stat in permStats.irregularStats)
+                for(let stat in permanentStats.irregularStats)
                 {
-                    if (permStats.irregularStats[stat].statComponents)
+                    if (permanentStats.irregularStats[stat].statComponents)
                     {
-                        if(permStats.irregularStats[stat].statComponents.baseValues)
+                        if(permanentStats.irregularStats[stat].statComponents.baseValues)
                         {
                             keysArray.push(stat);
                         }
@@ -231,11 +232,11 @@ function generateReferenceArrays(gameObject)
                 }
                 return keysArray;
             case "untouchableBaseStats":
-                for(let stat in permStats.untouchableStats)
+                for(let stat in permanentStats.untouchableStats)
                 {
                     if (stat != "lvl")
                     {
-                        if(permStats.untouchableStats[stat].statComponents.baseValues)
+                        if(permanentStats.untouchableStats[stat].statComponents.baseValues)
                         {
                             keysArray.push(stat);
                         }
