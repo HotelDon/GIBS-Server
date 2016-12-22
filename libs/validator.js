@@ -86,6 +86,7 @@ function generateGameProperties(gameObject)
     propertiesObject.hasSuccessFormulas = system.successFormulas.formulaList ? true : false;
     propertiesObject.hasDamageFormulas = system.damageFormulas.formulaList ? true : false;
     propertiesObject.hasMods = system.mods ? true : false;
+    propertiesObject.hasElements = system.elements ? true : false;
     
     if(propertiesObject.hasMods)
     {
@@ -98,8 +99,6 @@ function generateGameProperties(gameObject)
         propertiesObject.hasStageMods = system.mods.statMods.stageMods ? true : false;
         propertiesObject.hasSpecialMods = system.mods.statMods.specialMods ? true : false;
     }
-    
-    propertiesObject.hasElements = system.elements ? true : false;
     
     if(propertiesObject.hasElements)
     {
@@ -135,7 +134,7 @@ function generateReferenceArrays(gameObject)
         switch (fetchTarget)
         {
             case "regularStats":
-                if(permanentStats.regularStats)
+                if(gameProperties.hasRegularStats)
                 {
                     return Object.keys(permanentStats.regularStats.regularStatList);
                 }
@@ -149,13 +148,13 @@ function generateReferenceArrays(gameObject)
                 }
                 break;
             case "transitoryStats":
-                if(system.battlerStats.transitoryStats)
+                if(gameProperties.hasTransitoryStats)
                 {
                     return Object.keys(gameObject.system.battlerStats.transitoryStats);
                 }
                 break;
             case "moveStats":
-                if(system.moveStats)
+                if(gameProperties.hasMoveStats)
                 {
                     return Object.keys(gameObject.system.moveStats);
                 }
@@ -169,47 +168,35 @@ function generateReferenceArrays(gameObject)
                 break;
             case "stageMods":
             case "specialMods":
-                if (system.mods)
+                if(gameProperties.hasStatMods)
                 {
-                    if(system.mods.statMods)
+                    if(system.mods.statMods[fetchTarget])
                     {
-                        if(system.mods.statMods[fetchTarget])
-                        {
-                            return Object.keys(gameObject.system.mods.statMods[fetchTarget][fetchTarget.slice(0, -1)+"List"]);
-                        }
-                        break;
+                        return Object.keys(gameObject.system.mods.statMods[fetchTarget][fetchTarget.slice(0, -1)+"List"]);
                     }
                     break;
                 }
                 break;
             case "damageMods":
-                if (system.mods)
+                if (gameProperties.hasDamageMods)
                 {
-                    if (system.mods.damageMods)
-                    {
-                        return Object.keys(system.mods.damageMods);
-                    }
-                    break;
+                    return Object.keys(system.mods.damageMods);
                 }
                 break;
             case "elements":
-                if (system.elements)
+                if (gameProperties.hasElements)
                 {
                     return Object.keys(system.elements.elementList);
                 }
                 break;
             case "matchupTypes":
-                if (system.elements)
+                if (gameProperties.hasMatchupTypes)
                 {
-                    if(system.elements.matchupTypes)
-                    {
-                        return Object.keys(system.elements.matchupTypes);
-                    }
-                    break;
+                    return Object.keys(system.elements.matchupTypes);
                 }
                 break;
             case "regularBaseStats":
-                if(permanentStats.regularStats)
+                if(gameProperties.hasRegularStats)
                 {
                     if(permanentStats.regularStats.statComponents.baseValues)
                     {
