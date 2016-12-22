@@ -10,7 +10,7 @@ var gameValidator = ajv.compile(gameSchema);
 
 var testGame = loadExampleFile("gameExample");
 
-// Not sure if it's worth switching to immutible.js for three variables. Sticking with conts for now
+// Not sure if it's worth switching to immutible.js for three variables. Sticking with const for now
 const blankMoves = {"moves": {}};
 const blankBattler = {"battlers": {}};
 const blankEffects = {"effects": {}};
@@ -21,6 +21,8 @@ function validateGameFile(gameObject)
 {
     if (gameValidator(gameObject))
     {
+        gameObject.gameProperties = generateGameProperties(gameObject);
+        console.log(gameObject.gameProperties);
         gameObject.referenceArrays = generateReferenceArrays(gameObject);
         console.log(gameObject.referenceArrays);
         
@@ -70,6 +72,43 @@ function validateSplitGameFile(systemObject, battlersObject, movesObject, effect
     validateGameFile(Object.assign({}, system, battlers, moves, effects));
 }
 
+function generateGameProperties(gameObject)
+{
+    var propertiesObject = {};
+    const system = gameObject.system;
+    const permStats = system.battlerStats.permanentStats;
+    
+    propertiesObject.hasRegularStats = permStats.regularStats ? true : false;
+    propertiesObject.hasIrregularStats = permStats.irregularStats ? true : false;
+    propertiesObject.hasStatTilts = permStats.statTilts ? true : false;
+    propertiesObject.hasTransitoryStats = system.battlerStats.transitoryStats ? true : false;
+    propertiesObject.hasMoveStats = system.moveStats ? true : false;
+    propertiesObject.hasSuccessFormulas = system.successFormulas.formulaList ? true : false;
+    propertiesObject.hasDamageFormulas = system.damageFormulas.formulaList ? true : false;
+    propertiesObject.hasMods = system.mods ? true : false;
+    
+    if(propertiesObject.hasMods)
+    {
+        propertiesObject.hasStatMods = system.mods.statMods ? true : false;
+        propertiesObject.hasDamageMods = system.mods.damageMods ? true : false;
+    }
+    
+    if(propertiesObject.hasStatMods)
+    {
+        propertiesObject.hasStageMods = system.mods.statMods.stageMods ? true : false;
+        propertiesObject.hasSpecialMods = system.mods.statMods.specialMods ? true : false;
+    }
+    
+    propertiesObject.hasElements = system.elements ? true : false;
+    
+    if(propertiesObject.hasElements)
+    {
+        propertiesObject.hasMatchupTypes = system.elements.matchupTypes ? true : false;
+    }
+    
+    return propertiesObject;
+}
+
 function generateReferenceArrays(gameObject)
 {
     var refArraysObject = {};
@@ -87,7 +126,8 @@ function generateReferenceArrays(gameObject)
     
     function fetch(fetchTarget)
     {
-        const permStats = gameObject.system.battlerStats.permanentStats;
+        const system = gameObject.system;
+        const permStats = system.battlerStats.permanentStats;
         
         let keysArray = [];
         
@@ -193,7 +233,7 @@ function generateReferenceArrays(gameObject)
             case "untouchableBaseStats":
                 for(let stat in permStats.untouchableStats)
                 {
-                    if (permStats.untouchableStats[stat].statComponents)
+                    if (stat != "lvl")
                     {
                         if(permStats.untouchableStats[stat].statComponents.baseValues)
                         {
