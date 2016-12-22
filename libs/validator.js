@@ -93,16 +93,30 @@ function generateGameProperties(gameObject)
         propertiesObject.hasStatMods = system.mods.statMods ? true : false;
         propertiesObject.hasDamageMods = system.mods.damageMods ? true : false;
     }
+    else
+    {
+        propertiesObject.hasStatMods = false;
+        propertiesObject.hasDamageMods = false;
+    }
     
     if(propertiesObject.hasStatMods)
     {
         propertiesObject.hasStageMods = system.mods.statMods.stageMods ? true : false;
         propertiesObject.hasSpecialMods = system.mods.statMods.specialMods ? true : false;
     }
+    else
+    {
+        propertiesObject.hasStageMods = false;
+        propertiesObject.hasSpecialMods = false;
+    }
     
     if(propertiesObject.hasElements)
     {
         propertiesObject.hasMatchupTypes = system.elements.matchupTypes ? true : false;
+    }
+    else
+    {
+        propertiesObject.hasMatchupTypes = false;
     }
     
     return propertiesObject;
