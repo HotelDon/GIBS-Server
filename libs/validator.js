@@ -148,31 +148,31 @@ function generateReferenceArrays(gameObject)
                 }
                 break;
             case "transitoryStats":
-                if(gameObject.system.battlerStats.transitoryStats)
+                if(system.battlerStats.transitoryStats)
                 {
                     return Object.keys(gameObject.system.battlerStats.transitoryStats);
                 }
                 break;
             case "moveStats":
-                if(gameObject.system.moveStats)
+                if(system.moveStats)
                 {
                     return Object.keys(gameObject.system.moveStats);
                 }
                 break;
             case "successFormulas":
             case "damageFormulas":
-                if (gameObject.system[fetchTarget].formulaList)
+                if (system[fetchTarget].formulaList)
                 {
                     return Object.keys(gameObject.system[fetchTarget].formulaList);
                 }
                 break;
             case "stageMods":
             case "specialMods":
-                if (gameObject.system.mods)
+                if (system.mods)
                 {
-                    if(gameObject.system.mods.statMods)
+                    if(system.mods.statMods)
                     {
-                        if(gameObject.system.mods.statMods[fetchTarget])
+                        if(system.mods.statMods[fetchTarget])
                         {
                             return Object.keys(gameObject.system.mods.statMods[fetchTarget][fetchTarget.slice(0, -1)+"List"]);
                         }
@@ -182,27 +182,27 @@ function generateReferenceArrays(gameObject)
                 }
                 break;
             case "damageMods":
-                if (gameObject.system.mods)
+                if (system.mods)
                 {
-                    if (gameObject.system.mods.damageMods)
+                    if (system.mods.damageMods)
                     {
-                        return Object.keys(gameObject.system.mods.damageMods);
+                        return Object.keys(system.mods.damageMods);
                     }
                     break;
                 }
                 break;
             case "elements":
-                if (gameObject.system.elements)
+                if (system.elements)
                 {
-                    return Object.keys(gameObject.system.elements.elementList);
+                    return Object.keys(system.elements.elementList);
                 }
                 break;
             case "matchupTypes":
-                if (gameObject.system.elements)
+                if (system.elements)
                 {
-                    if(gameObject.system.elements.matchupTypes)
+                    if(system.elements.matchupTypes)
                     {
-                        return Object.keys(gameObject.system.elements.matchupTypes);
+                        return Object.keys(system.elements.matchupTypes);
                     }
                     break;
                 }
