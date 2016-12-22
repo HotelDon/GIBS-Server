@@ -281,7 +281,6 @@ battlers:
                     test3: 15
                 untouchableStats:
                     HP: 80
-                    mood: 0
             elementList:
                 - wind
             moveList:
