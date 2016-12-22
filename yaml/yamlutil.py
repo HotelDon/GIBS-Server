@@ -36,7 +36,7 @@ def main(args):
     elif args == "combineExamples":
         combineExamples()
     else:
-        print("Invalid Argument. Select from one of the following: combine, update")
+        print("Invalid Argument. Select from one of the following: updateSchemas, combineSchemas, combineExamples")
         sys.exit(2)
 
 def updateSchemas():
