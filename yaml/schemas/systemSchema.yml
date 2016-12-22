@@ -437,6 +437,8 @@ properties:
             - turnOrder
     referenceArrays:
         $ref: "#/definitions/referenceArraysObject"
+    gameProperties:
+        $ref: "#/definitions/gamePropertiesObject"
 additionalProperties: false
 required:
     - system
@@ -566,6 +568,38 @@ definitions:
                     - displayName
                     - effectTiming
         minProperties: 1
+        additionalProperties: false
+    gamePropertiesObject:
+        type: object
+        properties:
+            hasRegularStats:
+                type: boolean
+            hasIrregularStats:
+                type: boolean
+            hasStatTilts:
+                type: boolean
+            hasTransitoryStats:
+                type: boolean
+            hasMoveStats:
+                type: boolean
+            hasSuccessFormulas:
+                type: boolean
+            hasDamageFormulas:
+                type: boolean
+            hasMods:
+                type: boolean
+            hasStatMods:
+                type: boolean
+            hasDamageMods:
+                type: boolean
+            hasStageMods:
+                type: boolean
+            hasSpecialMods:
+                type: boolean
+            hasElements:
+                type: boolean
+            hasMatchupTypes:
+                type: boolean
         additionalProperties: false
     formulaList:
         type: object
