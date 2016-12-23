@@ -148,15 +148,21 @@ function generateReferenceArrays(gameObject)
         switch (fetchTarget)
         {
             case "regularStats":
-                if(gameProperties.hasRegularStats)
+                if (gameProperties.hasRegularStats)
                 {
                     return Object.keys(permanentStats.regularStats.regularStatList);
                 }
                 break;
             case "irregularStats":
+                if (gameProperties.hasIrregularStats)
+                {
+                    return Object.keys(permanentStats.irregularStats);
+                }
+                break;
             case "untouchableStats":
+                return Object.keys(permanentStats.untouchableStats);
             case "statTilts":
-                if (permanentStats[fetchTarget])
+                if (gameProperties.hasStatTilts)
                 {
                     return Object.keys(permanentStats[fetchTarget]);
                 }
@@ -164,31 +170,37 @@ function generateReferenceArrays(gameObject)
             case "transitoryStats":
                 if(gameProperties.hasTransitoryStats)
                 {
-                    return Object.keys(gameObject.system.battlerStats.transitoryStats);
+                    return Object.keys(system.battlerStats.transitoryStats);
                 }
                 break;
             case "moveStats":
                 if(gameProperties.hasMoveStats)
                 {
-                    return Object.keys(gameObject.system.moveStats);
+                    return Object.keys(system.moveStats);
                 }
                 break;
             case "successFormulas":
-            case "damageFormulas":
-                if (system[fetchTarget].formulaList)
+                if (gameProperties.hasSuccessFormulas)
                 {
-                    return Object.keys(gameObject.system[fetchTarget].formulaList);
+                    return Object.keys(system.successFormulas.formulaList);
+                }
+                break;
+            case "damageFormulas":
+                if (gameProperties.hasDamageFormulas)
+                {
+                    return Object.keys(system.damageFormulas.formulaList);
                 }
                 break;
             case "stageMods":
-            case "specialMods":
-                if(gameProperties.hasStatMods)
+                if (gameProperties.hasStageMods)
                 {
-                    if(system.mods.statMods[fetchTarget])
-                    {
-                        return Object.keys(gameObject.system.mods.statMods[fetchTarget][fetchTarget.slice(0, -1)+"List"]);
-                    }
-                    break;
+                    return Object.keys(system.mods.statMods.stageMods.stageModList);
+                }
+                break;
+            case "specialMods":
+                if(gameProperties.hasSpecialMods)
+                {
+                    return Object.keys(system.mods.statMods.specialMods.specialModList);
                 }
                 break;
             case "damageMods":
