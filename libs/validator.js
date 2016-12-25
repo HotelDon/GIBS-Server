@@ -3,7 +3,6 @@
 var Ajv = require("ajv");
 var ajv = new Ajv({v5: true});
 var yaml = require("yamljs");
-var fs = require("fs");
 
 var gameSchema = loadSchemaFile("gameSchema");
 var gameValidator = ajv.compile(gameSchema);
