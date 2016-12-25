@@ -39,7 +39,7 @@ function validateGameFile(gameObject)
     }
     else
     {
-        console.log(gameValidator.errors)
+        console.log(gameValidator.errors);
         return false;
     }
 }
