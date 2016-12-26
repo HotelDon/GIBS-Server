@@ -13,5 +13,9 @@
     "nssocket": "^0.6.0",
     "sqlite3": "^3.1.2",
     "yamljs": "^0.2.8"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "eslint server.js libs/"
   }
 }
