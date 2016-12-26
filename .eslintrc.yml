@@ -1,0 +1,89 @@
+env:
+  node: true
+  es6: true
+extends: 'eslint:recommended'
+rules:
+  array-bracket-spacing:
+    - error
+    - never
+  block-spacing:
+    - error
+    - always
+  brace-style:
+    - error
+    - allman
+  capitalized-comments:
+    - warn
+    - always
+  comma-dangle: 
+    - error
+    - always-multiline
+  comma-spacing: error
+  comma-style: error
+  computed-property-spacing:
+    - error
+    - never
+  dot-notation: error
+  eol-last: error
+  func-call-spacing: error
+  func-style:
+    - error
+    - declaration
+  indent:
+    - error
+    - 4
+    - ArrayExpression: first
+      SwitchCase: 1
+  key-spacing: error
+  keyword-spacing: error
+  linebreak-style:
+    - error
+    - windows
+  lines-around-directive:
+    - error
+    - before: never
+      after: always
+  max-len:
+    - warn
+    - code: 100
+  max-statements-per-line: error
+  new-parens: error
+  newline-after-var: error
+  no-console: off
+  no-multiple-empty-lines: error
+  no-trailing-spaces: error
+  no-unused-vars: warn
+  no-whitespace-before-property: error
+  object-curly-spacing: error
+  object-property-newline: error
+  one-var-declaration-per-line: error
+  operator-linebreak:
+    - error
+    - after
+  padded-blocks:
+    - error
+    - never
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - always
+  semi-spacing:
+    - error
+    - before: false
+  space-before-blocks: error
+  space-before-function-paren:
+    - error
+    - never
+  space-in-parens: error
+  space-infix-ops: error
+  space-unary-ops: 
+    - error
+    - words: true
+      nonwords: false
+  spaced-comment: error
+  strict: 
+    - error
+    - global
+  wrap-regex: error
