@@ -55,7 +55,9 @@ rules:
   no-unused-vars: warn
   no-whitespace-before-property: error
   object-curly-spacing: error
-  object-property-newline: error
+  object-property-newline: 
+    - error
+    - allowMultiplePropertiesPerLine: true
   one-var-declaration-per-line: error
   operator-linebreak:
     - error
