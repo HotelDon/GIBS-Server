@@ -11,8 +11,8 @@ module.exports = function(db)
     module.getUsersLoggedIn = getUsersLoggedIn;
 
     function userLogin(socket, uname, pword, callback)
-    {    
-        if(!socket.userData)
+    {
+        if (!socket.userData)
         {
             auth.login(uname, pword, loginCallback);
         }
@@ -20,14 +20,14 @@ module.exports = function(db)
         {
             callback(new Error("You're already logged in!"));
         }
-        
+
         function loginCallback(err, result)
         {
-            if(!err && result)
+            if (!err && result)
             {
-                if(!usersLoggedIn[result.uid])
+                if (!usersLoggedIn[result.uid])
                 {
-                    usersLoggedIn[result.uid] = {"uid":result.uid, "uname":result.uname};
+                    usersLoggedIn[result.uid] = {"uid": result.uid, "uname": result.uname};
                     socket.userData = usersLoggedIn[result.uid];
                     callback(null, "Logged in Successfully");
                 }
@@ -35,7 +35,6 @@ module.exports = function(db)
                 {
                     callback(new Error("You're logged in on another device"));
                 }
-                
             }
             else
             {
@@ -46,7 +45,7 @@ module.exports = function(db)
 
     function userRegister(socket, uname, pword, email, callback)
     {
-        if(!socket.userData)
+        if (!socket.userData)
         {
             auth.register(uname, pword, email, regCallback);
         }
@@ -54,10 +53,10 @@ module.exports = function(db)
         {
             callback(new Error("You're already logged in!"));
         }
-        
+
         function regCallback(err, result)
         {
-            if(!err && result)
+            if (!err && result)
             {
                 callback(null, "Registeration Successful!");
             }
@@ -70,9 +69,9 @@ module.exports = function(db)
 
     function getUsersLoggedIn()
     {
-        
+
     }
-    
+
     return module;
-}
+};
 

@@ -9,27 +9,27 @@ var server = nssocket.createServer(onConnect);
 var port = 6785;
 
 server.listen(port);
-console.log("Connected to port "+port);
+console.log("Connected to port " + port);
 
-function onConnect (socket)
+function onConnect(socket)
 {
     socket.send(["connect", "success"]);
-    socket.data(["auth","reg"], register);
-    socket.data(["auth","login"], login);
+    socket.data(["auth", "reg"], register);
+    socket.data(["auth", "login"], login);
     socket.on("close", disconnect);
-    
+
     function register(data)
-    {    
+    {
         users.userRegister(socket, data.uname, data.pword, data.email, callback);
     }
     function login(data)
     {
         users.userLogin(socket, data.uname, data.pword, callback);
     }
-    
+
     function callback(err, result)
     {
-        if(err)
+        if (err)
         {
             console.log(err);
         }
@@ -39,9 +39,9 @@ function onConnect (socket)
             console.log(socket.userData);
         }
     }
-    
+
     function disconnect()
     {
-        
+
     }
 }
