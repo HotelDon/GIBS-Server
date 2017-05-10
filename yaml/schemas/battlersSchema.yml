@@ -11,7 +11,7 @@ properties:
                     properties:
                         type: object
                         patternProperties:
-                            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                                 $ref: "#/definitions/customBattlerProperties"
                         minProperties: 1
                         additionalProperties: false
@@ -20,7 +20,7 @@ properties:
             battlerList:
                 type: object
                 patternProperties:
-                    ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                         type: object
                         properties:
                             displayName:
@@ -47,7 +47,7 @@ properties:
                             properties:
                                 type: object
                                 patternProperties:
-                                    ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+                                    "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                                         $ref: "#/definitions/customBattlerProperties"
                                 additionalProperties: false
                             elementList:
@@ -63,7 +63,7 @@ properties:
                             moveList:
                                 type: object
                                 patternProperties:
-                                    ^[0-9]{1,16}$:
+                                    "^[0-9]{1,16}$":
                                         oneOf:
                                             - enum:
                                                   $data: "/referenceArrays/moves"
@@ -92,7 +92,7 @@ definitions:
     baseStatDefinition:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 type: integer
         minProperties: 1
         additionalProperties: false
@@ -155,7 +155,7 @@ definitions:
     customMoveProperties:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 type: string
         minProperties: 1
         additionalProperties: false
@@ -172,7 +172,7 @@ definitions:
     effectTypeEntry:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 type: object
                 properties:
                     displayName:
@@ -249,7 +249,7 @@ definitions:
     formulaList:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 type: string
         minProperties: 1
         additionalProperties: false
@@ -293,14 +293,14 @@ definitions:
     itemsEntry:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 $ref: "#/definitions/resultsArray"
         minProperties: 1
         additionalProperties: false
     moveStats:
         type: object
         patternProperties:
-            ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$:
+            "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$":
                 oneOf:
                     - type: integer
                     - type: "null"
@@ -596,13 +596,13 @@ definitions:
             - useOn
             - statusEffect
     stringAbbreviation:
-        pattern: ^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$
+        pattern: "^[^\s()*^+,.;'!&~|=?:{}\\\/\[\]\-]{1,64}$"
     stringDescriptionText:
         type: string
         maxLength: 300
     stringDisplayName:
         type: string
-        pattern: ^[\S]([\S ]{0,62}[\S]$|$)
+        pattern: "^[\S]([\S ]{0,62}[\S]$|$)"
     targetTypes:
         anyOf:
             - enum: [Single, Single Foe, Single Partner]
